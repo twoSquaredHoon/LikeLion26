@@ -11,7 +11,7 @@
   :root {
     --red: #E8750A;
     --ink: #1A0A0A;
-    --ink-muted: #9A7060;
+    --ink-muted: #A06030;
     --border: #2A1A0A;
   }
 
@@ -59,7 +59,14 @@
     flex-shrink: 0;
     background: linear-gradient(180deg, #FFE8A0 0%, transparent 100%);
   }
-  .page-title { font-size: 26px; font-weight: 900; color: var(--ink); letter-spacing: -0.03em; line-height: 1.1; }
+  .page-title {
+    font-size: 26px; font-weight: 900;
+    background: linear-gradient(135deg, #FF6B00 0%, #E8400A 50%, #C8200A 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    letter-spacing: -0.03em; line-height: 1.1;
+  }
   .close-btn {
     width: 36px; height: 36px; border-radius: 12px; margin-top: 2px;
     background: rgba(255,200,80,0.4); border: 2px solid var(--border);
@@ -67,8 +74,8 @@
     cursor: pointer; box-shadow: 2px 2px 0 var(--border); flex-shrink: 0;
   }
   .page-sub {
-    font-size: 12px; font-weight: 600; color: #A06030;
-    padding: 4px 22px 20px; flex-shrink: 0;
+    font-size: 12px; font-weight: 500; color: var(--ink-muted);
+    padding: 2px 22px 18px; flex-shrink: 0;
   }
 
   /* SCROLL AREA */
@@ -82,46 +89,35 @@
   /* SECTION LABEL */
   .section-label {
     padding: 0 22px 10px;
-    font-size: 11px; font-weight: 900; color: #A06030;
+    font-size: 11px; font-weight: 900; color: var(--ink-muted);
     text-transform: uppercase; letter-spacing: 0.08em;
   }
 
   /* MEAL OPTIONS GRID */
   .options-grid {
     display: grid; grid-template-columns: 1fr 1fr;
-    gap: 10px; padding: 0 18px;
+    gap: 14px; padding: 4px 18px 0;
   }
   .option-card {
     border: 2.5px solid var(--border);
     border-radius: 18px;
     box-shadow: 3px 3px 0 var(--border);
-    padding: 14px 13px 12px;
+    padding: 22px 14px 20px;
     cursor: pointer;
     transition: box-shadow 0.1s, transform 0.1s;
-    display: flex; flex-direction: column; gap: 8px;
-    background: rgba(255,255,240,0.85);
+    display: flex; flex-direction: column; align-items: center; gap: 12px;
+    text-align: center;
   }
   .option-card:active { box-shadow: 1px 1px 0 var(--border); transform: translate(2px,2px); }
 
-  .option-top { display: flex; justify-content: space-between; align-items: flex-start; }
+  .option-top { display: flex; justify-content: center; align-items: center; }
   .option-icon {
-    width: 38px; height: 38px; border-radius: 12px;
+    width: 52px; height: 52px; border-radius: 16px;
     border: 2px solid var(--border);
     display: flex; align-items: center; justify-content: center;
-    font-size: 18px;
+    font-size: 26px;
   }
-  .option-tag {
-    font-size: 9px; font-weight: 700; text-transform: uppercase;
-    letter-spacing: 0.06em; padding: 3px 8px;
-    border-radius: 8px; border: 1.5px solid var(--border);
-  }
-  .option-name { font-size: 14px; font-weight: 900; color: var(--ink); letter-spacing: -0.02em; line-height: 1.2; }
-  .option-kcal { font-size: 11px; font-weight: 700; color: var(--ink-muted); }
-  .option-macros { display: flex; gap: 5px; flex-wrap: wrap; }
-  .om { font-size: 9px; font-weight: 700; color: white; border-radius: 7px; padding: 2px 6px; }
-  .om.p { background: #FF6B9D; }
-  .om.c { background: #FF9F1C; }
-  .om.f { background: #2EC4B6; }
+  .option-name { font-size: 13px; font-weight: 900; color: var(--ink); letter-spacing: -0.02em; line-height: 1.3; }
 
   /* QUICK ADD-ONS ROW */
   .snacks-row {
@@ -132,43 +128,17 @@
   .snacks-row::-webkit-scrollbar { display: none; }
   .snack-chip {
     flex-shrink: 0;
-    background: rgba(255,255,255,0.85);
+    background: rgba(255,255,255,0.7);
     border: 2px solid var(--border);
     border-radius: 14px;
     box-shadow: 3px 3px 0 var(--border);
-    padding: 9px 13px;
+    padding: 10px 14px;
     display: flex; align-items: center; gap: 8px;
     cursor: pointer;
     transition: box-shadow 0.1s, transform 0.1s;
   }
   .snack-chip:active { box-shadow: 1px 1px 0 var(--border); transform: translate(2px,2px); }
   .snack-chip-name { font-size: 12px; font-weight: 800; color: var(--ink); line-height: 1; }
-  .snack-chip-kcal { font-size: 10px; font-weight: 600; color: var(--ink-muted); margin-top: 1px; }
-
-  /* DIVIDER */
-  .divider { margin: 20px 18px 0; height: 2px; background: rgba(26,10,10,0.08); border-radius: 1px; }
-
-  /* SEARCH ROW */
-  .search-row {
-    margin: 12px 18px 0;
-    background: #FFD8A0;
-    border: 2.5px solid var(--border);
-    border-radius: 16px;
-    box-shadow: 3px 3px 0 var(--border);
-    padding: 12px 14px;
-    display: flex; align-items: center; gap: 12px;
-    cursor: pointer;
-  }
-  .search-row-icon {
-    width: 36px; height: 36px; border-radius: 12px;
-    background: white; border: 2px solid var(--border);
-    box-shadow: 2px 2px 0 var(--border);
-    display: flex; align-items: center; justify-content: center;
-    flex-shrink: 0;
-  }
-  .search-row-text { flex: 1; }
-  .search-row-label { font-size: 13px; font-weight: 900; color: var(--ink); letter-spacing: -0.01em; }
-  .search-row-sub { font-size: 11px; font-weight: 600; color: var(--ink-muted); margin-top: 2px; }
 </style>
 </head>
 <body>
@@ -207,119 +177,61 @@
       </svg>
     </div>
   </div>
-  <div class="page-sub">Log anything extra you had — we'll update your totals ☀️</div>
+  <div class="page-sub">We'll add it to this morning's totals ☀️</div>
 
   <!-- Scrollable content -->
   <div class="scroll-body">
-
-    <div class="section-label">What else did you have?</div>
 
     <div class="options-grid">
 
       <div class="option-card" style="background:#FFF9F0;">
         <div class="option-top">
           <div class="option-icon" style="background:#FFF3DC;border-color:#C8A800;">🍳</div>
-          <div class="option-tag" style="background:#FFE8EA;color:#CC1A2A;border-color:#FF3347;">+Protein</div>
         </div>
         <div class="option-name">Scrambled Eggs & Toast</div>
-        <div class="option-kcal">420 kcal</div>
-        <div class="option-macros">
-          <span class="om p">28g P</span>
-          <span class="om c">38g C</span>
-          <span class="om f">14g F</span>
-        </div>
       </div>
 
       <div class="option-card" style="background:#FFF9E0;">
         <div class="option-top">
           <div class="option-icon" style="background:#FFF3DC;border-color:#C8A800;">🥞</div>
-          <div class="option-tag" style="background:#FFF2DC;color:#CC7700;border-color:#FF9F1C;">Carbs</div>
         </div>
         <div class="option-name">Pancakes & Syrup</div>
-        <div class="option-kcal">540 kcal</div>
-        <div class="option-macros">
-          <span class="om c">86g C</span>
-          <span class="om p">12g P</span>
-          <span class="om f">10g F</span>
-        </div>
       </div>
 
       <div class="option-card" style="background:#F0FFF6;">
         <div class="option-top">
           <div class="option-icon" style="background:#DCFCE7;border-color:#16A34A;">🥑</div>
-          <div class="option-tag" style="background:#DCFCE7;color:#16A34A;border-color:#22C55E;">Light</div>
         </div>
         <div class="option-name">Avocado Toast</div>
-        <div class="option-kcal">310 kcal</div>
-        <div class="option-macros">
-          <span class="om c">32g C</span>
-          <span class="om f">18g F</span>
-          <span class="om p">8g P</span>
-        </div>
       </div>
 
-      <div class="option-card" style="background:#FFF5F5;">
+      <div class="option-card" style="background:#FFF5F0;">
         <div class="option-top">
-          <div class="option-icon" style="background:#FFF9E0;border-color:#C8A800;">🥣</div>
-          <div class="option-tag" style="background:#F3E8FF;color:#7C3AED;border-color:#9333EA;">Same</div>
+          <div class="option-icon" style="background:#FFE8DC;border-color:#C86030;">🥣</div>
         </div>
         <div class="option-name">Greek Yogurt Parfait</div>
-        <div class="option-kcal">365 kcal · Same bowl</div>
-        <div class="option-macros">
-          <span class="om p">22g P</span>
-          <span class="om c">48g C</span>
-        </div>
       </div>
 
     </div>
 
-    <div class="section-label" style="padding-top: 20px;">Quick Add-ons</div>
+    <div class="section-label" style="padding: 20px 22px 10px;">Quick Add-ons</div>
     <div class="snacks-row">
       <div class="snack-chip">
-        <span style="font-size:14px;">🍌</span>
-        <div>
-          <div class="snack-chip-name">Banana</div>
-          <div class="snack-chip-kcal">105 kcal</div>
-        </div>
+        <span style="font-size:16px;">🍌</span>
+        <div class="snack-chip-name">Banana</div>
       </div>
       <div class="snack-chip">
-        <span style="font-size:14px;">☕</span>
-        <div>
-          <div class="snack-chip-name">Latte</div>
-          <div class="snack-chip-kcal">120 kcal</div>
-        </div>
+        <span style="font-size:16px;">☕</span>
+        <div class="snack-chip-name">Latte</div>
       </div>
       <div class="snack-chip">
-        <span style="font-size:14px;">🧃</span>
-        <div>
-          <div class="snack-chip-name">Orange Juice</div>
-          <div class="snack-chip-kcal">110 kcal</div>
-        </div>
+        <span style="font-size:16px;">🧃</span>
+        <div class="snack-chip-name">Orange Juice</div>
       </div>
       <div class="snack-chip">
-        <span style="font-size:14px;">🍞</span>
-        <div>
-          <div class="snack-chip-name">Toast slice</div>
-          <div class="snack-chip-kcal">80 kcal</div>
-        </div>
+        <span style="font-size:16px;">🍞</span>
+        <div class="snack-chip-name">Toast Slice</div>
       </div>
-    </div>
-
-    <div class="divider"></div>
-
-    <div class="search-row">
-      <div class="search-row-icon">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--red)" stroke-width="2.5" stroke-linecap="round">
-          <circle cx="11" cy="11" r="7"/><path d="M21 21l-4.35-4.35"/>
-        </svg>
-      </div>
-      <div class="search-row-text">
-        <div class="search-row-label">Search or Scan Something Else</div>
-        <div class="search-row-sub">Didn't see it above? Add it manually</div>
-      </div>
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--ink-muted)" stroke-width="2" stroke-linecap="round">
-        <path d="M5 12h14M12 5l7 7-7 7"/>
-      </svg>
     </div>
 
   </div><!-- /scroll-body -->
