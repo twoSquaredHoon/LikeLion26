@@ -89,39 +89,29 @@
   /* MEAL OPTIONS GRID */
   .options-grid {
     display: grid; grid-template-columns: 1fr 1fr;
-    gap: 10px; padding: 0 18px;
+    gap: 14px; padding: 4px 18px 0;
   }
   .option-card {
     border: 2.5px solid var(--border);
     border-radius: 18px;
     box-shadow: 3px 3px 0 var(--border);
-    padding: 14px 13px 12px;
+    padding: 22px 14px 20px;
     cursor: pointer;
     transition: box-shadow 0.1s, transform 0.1s;
-    display: flex; flex-direction: column; gap: 8px;
+    display: flex; flex-direction: column; align-items: center; gap: 12px;
+    text-align: center;
     background: rgba(255,255,255,0.75);
   }
   .option-card:active { box-shadow: 1px 1px 0 var(--border); transform: translate(2px,2px); }
 
-  .option-top { display: flex; justify-content: space-between; align-items: flex-start; }
+  .option-top { display: flex; justify-content: center; align-items: center; }
   .option-icon {
-    width: 38px; height: 38px; border-radius: 12px;
+    width: 52px; height: 52px; border-radius: 16px;
     border: 2px solid var(--border);
     display: flex; align-items: center; justify-content: center;
-    font-size: 18px;
+    font-size: 26px;
   }
-  .option-tag {
-    font-size: 9px; font-weight: 700; text-transform: uppercase;
-    letter-spacing: 0.06em; padding: 3px 8px;
-    border-radius: 8px; border: 1.5px solid var(--border);
-  }
-  .option-name { font-size: 14px; font-weight: 900; color: var(--ink); letter-spacing: -0.02em; line-height: 1.2; }
-  .option-kcal { font-size: 11px; font-weight: 700; color: var(--ink-muted); }
-  .option-macros { display: flex; gap: 5px; flex-wrap: wrap; }
-  .om { font-size: 9px; font-weight: 700; color: white; border-radius: 7px; padding: 2px 6px; }
-  .om.p { background: #FF6B9D; }
-  .om.c { background: #FF9F1C; }
-  .om.f { background: #2EC4B6; }
+  .option-name { font-size: 13px; font-weight: 900; color: var(--ink); letter-spacing: -0.02em; line-height: 1.3; }
 
   /* QUICK ADD-ONS ROW */
   .snacks-row {
@@ -212,95 +202,55 @@
   <!-- Scrollable content -->
   <div class="scroll-body">
 
-    <div class="section-label">What else did you have?</div>
-
     <div class="options-grid">
 
-      <div class="option-card" style="background:#FFF5F5;">
+      <div class="option-card" style="background:rgba(220,240,255,0.6);">
         <div class="option-top">
           <div class="option-icon" style="background:#FDEBD6;border-color:#B8562A;">🍗</div>
-          <div class="option-tag" style="background:#FFE8EA;color:#CC1A2A;border-color:#FF3347;">+Protein</div>
         </div>
         <div class="option-name">Turkey Recovery</div>
-        <div class="option-kcal">875 kcal · Same plate</div>
-        <div class="option-macros">
-          <span class="om p">65g P</span>
-          <span class="om c">98g C</span>
-        </div>
       </div>
 
-      <div class="option-card" style="background:#F0FFF6;">
+      <div class="option-card" style="background:rgba(220,255,235,0.6);">
         <div class="option-top">
           <div class="option-icon" style="background:#DCFCE7;border-color:#16A34A;">🥗</div>
-          <div class="option-tag" style="background:#DCFCE7;color:#16A34A;border-color:#22C55E;">Light</div>
         </div>
         <div class="option-name">Garden Protein Bowl</div>
-        <div class="option-kcal">480 kcal</div>
-        <div class="option-macros">
-          <span class="om p">38g P</span>
-          <span class="om c">52g C</span>
-          <span class="om f">10g F</span>
-        </div>
       </div>
 
-      <div class="option-card" style="background:#FFFBF0;">
+      <div class="option-card" style="background:rgba(255,248,220,0.6);">
         <div class="option-top">
           <div class="option-icon" style="background:#FFF9E0;border-color:#C8A800;">🍝</div>
-          <div class="option-tag" style="background:#FFF2DC;color:#CC7700;border-color:#FF9F1C;">Carbs</div>
         </div>
         <div class="option-name">Pasta Bolognese</div>
-        <div class="option-kcal">620 kcal</div>
-        <div class="option-macros">
-          <span class="om c">82g C</span>
-          <span class="om p">28g P</span>
-        </div>
       </div>
 
-      <div class="option-card" style="background:#F8F0FF;">
+      <div class="option-card" style="background:rgba(235,230,255,0.6);">
         <div class="option-top">
           <div class="option-icon" style="background:#F3E8FF;border-color:#9333EA;">🥪</div>
-          <div class="option-tag" style="background:#F3E8FF;color:#7C3AED;border-color:#9333EA;">Quick</div>
         </div>
         <div class="option-name">Deli Sandwich</div>
-        <div class="option-kcal">430 kcal</div>
-        <div class="option-macros">
-          <span class="om p">24g P</span>
-          <span class="om c">48g C</span>
-          <span class="om f">12g F</span>
-        </div>
       </div>
 
     </div>
 
-    <div class="section-label" style="padding-top: 20px;">Quick Add-ons</div>
+    <div class="section-label" style="padding: 20px 22px 10px;">Quick Add-ons</div>
     <div class="snacks-row">
       <div class="snack-chip">
-        <span style="font-size:14px;">🍌</span>
-        <div>
-          <div class="snack-chip-name">Banana</div>
-          <div class="snack-chip-kcal">105 kcal</div>
-        </div>
+        <span style="font-size:16px;">🍌</span>
+        <div class="snack-chip-name">Banana</div>
       </div>
       <div class="snack-chip">
-        <span style="font-size:14px;">🥛</span>
-        <div>
-          <div class="snack-chip-name">Choco Milk</div>
-          <div class="snack-chip-kcal">180 kcal</div>
-        </div>
+        <span style="font-size:16px;">🥛</span>
+        <div class="snack-chip-name">Choco Milk</div>
       </div>
       <div class="snack-chip">
-        <span style="font-size:14px;">🍎</span>
-        <div>
-          <div class="snack-chip-name">Apple</div>
-          <div class="snack-chip-kcal">95 kcal</div>
-        </div>
+        <span style="font-size:16px;">🍎</span>
+        <div class="snack-chip-name">Apple</div>
       </div>
       <div class="snack-chip">
-        <span style="font-size:14px;">🥜</span>
-        <div>
-          <div class="snack-chip-name">Peanut Butter</div>
-          <div class="snack-chip-kcal">190 kcal</div>
-        </div>
+        <span style="font-size:16px;">🥜</span>
+        <div class="snack-chip-name">Peanut Butter</div>
       </div>
     </div>
 
