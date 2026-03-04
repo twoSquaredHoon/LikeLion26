@@ -53,15 +53,17 @@
   /* DATE NAVIGATOR */
   .date-nav { display: flex; padding: 12px 20px 0; flex-shrink: 0; }
   .date-strip {
-    display: flex; align-items: center; justify-content: space-around;
-    background: var(--bg2); border: 2.5px solid var(--border);
-    border-radius: 14px; padding: 4px; box-shadow: 2px 2px 0 var(--border);
-    gap: 2px; width: 100%;
+    display: flex; align-items: center; justify-content: center;
+    border-radius: 22px; padding: 4px;
+    gap: 4px; width: 100%;
   }
-  .date-pill { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 0; border-radius: 8px; cursor: pointer; width: 36px; height: 36px; }
+  .date-pill { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 0; border-radius: 14px; cursor: pointer; width: 36px; height: 36px; border: 2px solid var(--border); }
   .date-pill.muted { background: #3A2A2A; }
   .date-pill.muted .date-day { color: rgba(255,255,255,0.5); }
   .date-pill.muted .date-num { color: rgba(255,255,255,0.8); }
+  .date-pill.future { background: #E0D8D0; }
+  .date-pill.future .date-day { color: #9A8A80; }
+  .date-pill.future .date-num { color: #6A5A54; }
   .date-pill.active { background: var(--red); }
   .date-day { font-size: 8px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.03em; color: var(--ink-muted); }
   .date-pill.active .date-day { color: rgba(255,255,255,0.8); }
@@ -118,7 +120,7 @@
     width: 22px; height: 22px; border-radius: 50%;
     background: var(--red-light); border: 2px solid var(--border);
     display: flex; align-items: center; justify-content: center;
-    cursor: pointer; box-shadow: 1px 1px 0 var(--border);
+    cursor: pointer;
     transition: transform 0.3s;
   }
   .hall-card.expanded .expand-btn { transform: rotate(180deg); }
@@ -453,8 +455,9 @@
       d.setDate(today.getDate() + i + weekOffset * 5);
       const isToday = i === 0 && weekOffset === 0;
       const isPast = d < today && !isToday;
+      const isFuture = d > today;
       const pill = document.createElement('div');
-      pill.className = 'date-pill' + (isToday ? ' active' : isPast ? ' muted' : '');
+      pill.className = 'date-pill' + (isToday ? ' active' : isPast ? ' muted' : isFuture ? ' future' : '');
       pill.innerHTML = `<span class="date-day">${DAYS[d.getDay()]}</span><span class="date-num">${d.getDate()}</span>`;
       strip.appendChild(pill);
     }
