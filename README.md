@@ -6,8 +6,9 @@ A university dining hall meal recommendation app that automatically suggests per
 
 ## Tech Stack
 
-- **React Native** + **Expo** (with Expo Router for file-based navigation)
+- **React Native** + **Expo**
 - **TypeScript**
+- **React Navigation** — screen navigation
 - **Zustand** — lightweight state management
 - **TanStack React Query** — data fetching + caching
 - **Axios** — HTTP client
@@ -24,10 +25,12 @@ cd WhatToEat-Frontend
 
 ### 2. Install dependencies
 ```bash
-npm install
-npx expo install expo-router react-native-safe-area-context react-native-screens expo-linking expo-constants expo-status-bar
+npm install expo@54
+npx expo install --fix
+npm install @react-navigation/native @react-navigation/stack @react-navigation/bottom-tabs
 npm install @tanstack/react-query axios zustand
 npm install -D @types/react @types/react-native
+npx expo install react-native-screens react-native-safe-area-context
 ```
 
 ### 3. Start the dev server
@@ -35,23 +38,11 @@ npm install -D @types/react @types/react-native
 npx expo start
 ```
 
-Then press:
-- `i` to open in iOS Simulator
-- `a` to open in Android Emulator
-- `w` to open in browser
-- Scan the QR code with **Expo Go** on your phone
-
----
-
-## Screens
-
-- **Login** — Choose between logging in (email or Google), signing up, or continuing as a guest.
-- **Onboarding** — After login, collect basic user info (birthday, gender required; rest skippable) to personalize recommendations.
-- **Home** — Swipeable daily meal recommendations per dining hall at the top, plus a log of what you've eaten today with calorie tracking below.
-- **Dining Halls** — Browse 6 dining halls with expandable dropdowns showing recommended meal plates, today's menu, open/close status, and live occupancy.
-- **Scan** — Camera screen that analyzes a photo of your food and returns calorie + macro breakdown.
-- **Community** — Social feed filtered by dining hall where users can post text, photos, and videos with tags.
-- **Settings** — Manage personal info, password, favorites, dietary preferences, notifications, and account actions like logout.
+Then:
+- Scan the QR code with **Expo Go** on your phone (must be on the same WiFi)
+- Press `i` for iOS Simulator
+- Press `a` for Android Emulator
+- Press `w` for browser
 
 ---
 
@@ -76,11 +67,22 @@ WhatToEat-Frontend/
 │   ├── types/                # TypeScript interfaces
 │   └── constants/            # Colors, spacing, API URLs
 ├── assets/
-│   ├── images/
-│   └── fonts/
 ├── App.tsx                   # Entry point
 └── app.json
 ```
+
+---
+
+## Screens
+
+- **Login** — Email/Google login or continue as guest
+- **Signup** — Email or Google sign up
+- **Onboarding** — Set health goals and dietary preferences after first login
+- **Home** — Daily meal recommendations + personal meal log with calorie tracking
+- **Dining Halls** — Browse 6 dining halls with menus, recommended plates, hours, and occupancy
+- **Scan** — Camera food scanner that returns calorie + macro breakdown
+- **Community** — Social feed filtered by dining hall with posts, photos, and videos
+- **Settings** — Profile, password, favorites, preferences, and notifications
 
 ---
 
