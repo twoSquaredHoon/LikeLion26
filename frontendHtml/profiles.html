@@ -1,0 +1,740 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fuel – Profile</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --red: #FF3347;
+    --red-deep: #CC1A2A;
+    --red-light: #FFE0E3;
+    --bg: #FFF0F0;
+    --bg2: #FFF5F5;
+    --ink: #1A0A0A;
+    --ink-muted: #9A7070;
+    --border: #2A1A1A;
+    --card-shadow: 4px 4px 0px #2A1A1A;
+    --card-shadow-lg: 6px 6px 0px #2A1A1A;
+    --green: #22C55E;
+    --green-light: #DCFCE7;
+    --cream: #F5ECD7;
+  }
+
+  body {
+    background: #FFFFFF;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    min-height: 100vh;
+    padding: 48px 24px;
+    font-family: 'Inter', sans-serif;
+  }
+
+  .phone {
+    width: 402px;
+    background: var(--cream);
+    border-radius: 48px;
+    overflow: hidden;
+    border: 3px solid var(--border);
+    box-shadow: 0 20px 60px rgba(0,0,0,0.18);
+    position: relative;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* STATUS BAR */
+  .status-bar {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 16px 30px 0; position: relative; z-index: 10;
+  }
+  .notch {
+    width: 126px; height: 36px; background: var(--ink);
+    border-radius: 0 0 22px 22px;
+    position: absolute; top: 0; left: 50%; transform: translateX(-50%);
+  }
+  .status-time { font-size: 13px; font-weight: 800; color: var(--ink); z-index: 1; }
+  .status-icons { display: flex; gap: 5px; align-items: center; z-index: 1; }
+
+  /* PAGE HEADER */
+  .page-header {
+    margin: 14px 20px 0;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .page-title {
+    font-size: 26px; font-weight: 900; color: var(--ink);
+    letter-spacing: -0.04em;
+  }
+  .header-actions { display: flex; gap: 8px; }
+  .icon-btn {
+    width: 40px; height: 40px;
+    background: #FFF5F5;
+    border: 2.5px solid var(--border);
+    border-radius: 14px;
+    box-shadow: 3px 3px 0 var(--border);
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer;
+  }
+
+  /* HERO PROFILE CARD */
+  .hero-card {
+    margin: 12px 20px 0;
+    background: var(--ink);
+    border: 3px solid var(--border);
+    border-radius: 28px;
+    box-shadow: var(--card-shadow-lg);
+    padding: 18px;
+    position: relative;
+    overflow: hidden;
+    flex-shrink: 0;
+  }
+  /* decorative blobs */
+  .hero-blob1 {
+    position: absolute; width: 140px; height: 140px;
+    background: var(--red); border-radius: 50%;
+    top: -50px; right: -40px; opacity: 0.18;
+  }
+  .hero-blob2 {
+    position: absolute; width: 80px; height: 80px;
+    background: #FF9F1C; border-radius: 50%;
+    bottom: -20px; left: 30px; opacity: 0.12;
+  }
+  .hero-top {
+    display: flex; align-items: flex-start; gap: 14px;
+    position: relative; z-index: 1;
+  }
+  .avatar-wrap { position: relative; flex-shrink: 0; }
+  .avatar {
+    width: 68px; height: 68px; border-radius: 22px;
+    background: var(--red-light);
+    border: 3px solid rgba(255,255,255,0.25);
+    display: flex; align-items: center; justify-content: center;
+  }
+  .avatar-initials { font-size: 22px; font-weight: 900; color: var(--red); letter-spacing: -0.03em; }
+  .avatar-online {
+    position: absolute; bottom: -2px; right: -2px;
+    width: 16px; height: 16px; border-radius: 50%;
+    background: var(--green);
+    border: 2.5px solid var(--ink);
+  }
+  .hero-info { flex: 1; padding-top: 2px; }
+  .hero-name { font-size: 20px; font-weight: 900; color: white; letter-spacing: -0.03em; line-height: 1; }
+  .hero-handle { font-size: 12px; font-weight: 600; color: rgba(255,255,255,0.45); margin-top: 3px; }
+  .hero-goal-tag {
+    margin-top: 8px;
+    display: inline-flex; align-items: center; gap: 6px;
+    background: var(--red);
+    border: 2px solid rgba(255,255,255,0.2);
+    border-radius: 12px;
+    padding: 4px 10px;
+  }
+  .hero-goal-text { font-size: 11px; font-weight: 800; color: white; letter-spacing: 0.02em; }
+  .hero-edit-btn {
+    background: rgba(255,255,255,0.1);
+    border: 2px solid rgba(255,255,255,0.2);
+    border-radius: 12px;
+    padding: 6px 14px;
+    font-size: 12px; font-weight: 800; color: white;
+    cursor: pointer; letter-spacing: 0.01em;
+    flex-shrink: 0;
+  }
+
+  /* Stats strip */
+  .hero-stats {
+    margin-top: 14px;
+    display: flex; gap: 8px;
+    position: relative; z-index: 1;
+  }
+  .hstat {
+    flex: 1;
+    background: rgba(255,255,255,0.08);
+    border: 1.5px solid rgba(255,255,255,0.12);
+    border-radius: 14px;
+    padding: 8px 10px;
+    text-align: center;
+  }
+  .hstat-val { font-size: 18px; font-weight: 900; color: white; line-height: 1; letter-spacing: -0.03em; }
+  .hstat-label { font-size: 9px; font-weight: 700; color: rgba(255,255,255,0.45); text-transform: uppercase; letter-spacing: 0.07em; margin-top: 3px; }
+
+  /* SCROLL BODY */
+  .scroll-body { overflow-y: auto; }
+  .scroll-body::-webkit-scrollbar { display: none; }
+
+  /* SECTION HEADER */
+  .section-header {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 14px 22px 8px;
+  }
+  .section-title { font-size: 10px; font-weight: 800; color: var(--ink-muted); letter-spacing: 0.1em; text-transform: uppercase; }
+  .section-action { font-size: 11px; font-weight: 800; color: var(--red); letter-spacing: 0.01em; }
+
+  /* STREAK CARD */
+  .streak-card {
+    margin: 0 20px;
+    background: var(--green);
+    border: 3px solid var(--border);
+    border-radius: 20px;
+    box-shadow: var(--card-shadow);
+    padding: 12px 16px;
+    display: flex; align-items: center; gap: 12px;
+    flex-shrink: 0;
+  }
+  .streak-flame {
+    width: 48px; height: 48px; border-radius: 16px;
+    background: rgba(255,255,255,0.2);
+    border: 2px solid rgba(255,255,255,0.3);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 24px; flex-shrink: 0;
+  }
+  .streak-info { flex: 1; }
+  .streak-num { font-size: 28px; font-weight: 900; color: white; letter-spacing: -0.04em; line-height: 1; }
+  .streak-label { font-size: 11px; font-weight: 700; color: rgba(255,255,255,0.75); margin-top: 2px; }
+  .streak-bar-wrap { display: flex; flex-direction: column; gap: 4px; align-items: flex-end; }
+  .streak-days { display: flex; gap: 4px; }
+  .sday {
+    width: 22px; height: 22px; border-radius: 8px;
+    border: 2px solid rgba(255,255,255,0.3);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 8px; font-weight: 800; color: rgba(255,255,255,0.6);
+    text-transform: uppercase;
+  }
+  .sday.done { background: rgba(255,255,255,0.3); color: white; }
+  .sday.today { background: white; color: var(--green); border-color: white; }
+  .streak-caption { font-size: 9px; font-weight: 700; color: rgba(255,255,255,0.6); letter-spacing: 0.04em; }
+
+  /* MACRO RING CARD */
+  .macro-card {
+    margin: 0 20px;
+    background: #FFF5F5;
+    border: 2.5px solid var(--border);
+    border-radius: 20px;
+    box-shadow: var(--card-shadow);
+    padding: 14px 16px;
+    display: flex; align-items: center; gap: 14px;
+  }
+  .ring-wrap {
+    position: relative; flex-shrink: 0;
+    width: 80px; height: 80px;
+  }
+  .ring-svg { width: 80px; height: 80px; transform: rotate(-90deg); }
+  .ring-center {
+    position: absolute; inset: 0;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+  }
+  .ring-pct { font-size: 17px; font-weight: 900; color: var(--ink); letter-spacing: -0.03em; line-height: 1; }
+  .ring-sub { font-size: 8px; font-weight: 700; color: var(--ink-muted); text-transform: uppercase; letter-spacing: 0.06em; }
+  .macro-bars { flex: 1; display: flex; flex-direction: column; gap: 7px; }
+  .mbar-row { display: flex; align-items: center; gap: 8px; }
+  .mbar-label { font-size: 10px; font-weight: 800; color: var(--ink-muted); width: 42px; text-align: right; letter-spacing: 0.02em; }
+  .mbar-track {
+    flex: 1; height: 10px; border-radius: 5px;
+    background: rgba(42,26,26,0.08);
+    border: 1.5px solid var(--border);
+    overflow: hidden;
+    position: relative;
+  }
+  .mbar-fill {
+    height: 100%; border-radius: 4px;
+    transition: width 0.6s cubic-bezier(.4,0,.2,1);
+  }
+  .mbar-val { font-size: 10px; font-weight: 800; color: var(--ink); width: 28px; }
+
+  /* BODY STATS GRID */
+  .body-grid {
+    margin: 0 20px;
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+  .bstat-card {
+    background: #FFF5F5;
+    border: 2.5px solid var(--border);
+    border-radius: 18px;
+    box-shadow: 3px 3px 0 var(--border);
+    padding: 12px 14px;
+    position: relative; overflow: hidden;
+  }
+  .bstat-accent {
+    position: absolute; top: -12px; right: -12px;
+    width: 48px; height: 48px; border-radius: 50%;
+    opacity: 0.12;
+  }
+  .bstat-icon {
+    width: 32px; height: 32px; border-radius: 11px;
+    border: 2px solid var(--border);
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 8px;
+  }
+  .bstat-val { font-size: 22px; font-weight: 900; color: var(--ink); letter-spacing: -0.04em; line-height: 1; }
+  .bstat-unit { font-size: 12px; font-weight: 700; color: var(--ink-muted); }
+  .bstat-label { font-size: 10px; font-weight: 700; color: var(--ink-muted); text-transform: uppercase; letter-spacing: 0.06em; margin-top: 3px; }
+  .bstat-delta {
+    display: inline-flex; align-items: center; gap: 3px;
+    margin-top: 5px;
+    font-size: 10px; font-weight: 800;
+    background: var(--green-light);
+    border: 1.5px solid var(--green);
+    border-radius: 8px; padding: 2px 7px;
+    color: #15803D;
+  }
+  .bstat-delta.down { background: #FFE0E3; border-color: var(--red); color: var(--red-deep); }
+
+  /* ACHIEVEMENTS */
+  .badge-grid {
+    margin: 0 20px;
+    display: grid; grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+  }
+  .badge-item {
+    display: flex; flex-direction: column; align-items: center; gap: 5px;
+  }
+  .badge-circle {
+    width: 54px; height: 54px; border-radius: 18px;
+    border: 2.5px solid var(--border);
+    box-shadow: 3px 3px 0 var(--border);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 24px;
+    position: relative;
+  }
+  .badge-circle.locked {
+    background: #EDE0D0; opacity: 0.5;
+    filter: grayscale(1);
+  }
+  .badge-circle.earned { background: #FFF5F5; }
+  .badge-new {
+    position: absolute; top: -5px; right: -5px;
+    width: 14px; height: 14px; border-radius: 7px;
+    background: var(--red);
+    border: 2px solid var(--border);
+  }
+  .badge-name { font-size: 9px; font-weight: 700; color: var(--ink); text-align: center; letter-spacing: 0.01em; line-height: 1.2; }
+  .badge-name.locked { color: var(--ink-muted); }
+
+  /* WEEKLY CHART */
+  .chart-card {
+    margin: 0 20px;
+    background: #FFF5F5;
+    border: 2.5px solid var(--border);
+    border-radius: 20px;
+    box-shadow: var(--card-shadow);
+    padding: 14px 16px;
+  }
+  .chart-header { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 10px; }
+  .chart-title { font-size: 13px; font-weight: 900; color: var(--ink); letter-spacing: -0.01em; }
+  .chart-avg { font-size: 11px; font-weight: 700; color: var(--ink-muted); }
+  .chart-avg span { color: var(--red); font-weight: 900; }
+  .chart-bars {
+    display: flex; align-items: flex-end; gap: 5px;
+    height: 64px;
+  }
+  .chart-col { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 4px; }
+  .chart-bar-wrap {
+    flex: 1; width: 100%; display: flex; align-items: flex-end;
+  }
+  .chart-bar {
+    width: 100%; border-radius: 6px 6px 0 0;
+    border: 2px solid var(--border);
+    border-bottom: none;
+    min-height: 6px;
+    position: relative;
+  }
+  .chart-bar.today { border-color: var(--red); }
+  .chart-day {
+    font-size: 9px; font-weight: 800; color: var(--ink-muted);
+    text-transform: uppercase; letter-spacing: 0.04em;
+  }
+  .chart-day.today { color: var(--red); }
+  .chart-goal-line {
+    position: relative; margin-top: 4px;
+    display: flex; align-items: center; gap: 6px;
+  }
+  .goal-line-bar {
+    flex: 1; height: 2px; background: repeating-linear-gradient(90deg, var(--red) 0px, var(--red) 5px, transparent 5px, transparent 9px);
+    opacity: 0.5;
+  }
+  .goal-line-label { font-size: 9px; font-weight: 800; color: var(--red); opacity: 0.7; white-space: nowrap; }
+
+  /* BOTTOM NAV */
+  .bottom-nav {
+    display: flex; justify-content: space-around; align-items: center;
+    padding: 10px 24px 28px;
+    background: var(--bg2);
+    border-top: 3px solid var(--border);
+    margin-top: 10px;
+    flex-shrink: 0;
+  }
+  .nav-item { display: flex; flex-direction: column; align-items: center; gap: 4px; cursor: pointer; }
+  .nav-icon-wrap {
+    width: 38px; height: 38px; border-radius: 14px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .nav-icon-wrap.active {
+    background: var(--red-light);
+    border: 2.5px solid var(--border);
+    box-shadow: 2px 2px 0 var(--border);
+  }
+  .nav-label { font-size: 10px; font-weight: 700; letter-spacing: .02em; color: var(--ink-muted); }
+  .nav-label.active { color: var(--red); }
+</style>
+</head>
+<body>
+<div class="phone">
+
+  <!-- Status Bar -->
+  <div class="status-bar">
+    <span class="status-time" style="z-index:1">9:41</span>
+    <div class="notch"></div>
+    <div class="status-icons">
+      <svg width="16" height="12" viewBox="0 0 16 12" fill="var(--ink)">
+        <rect x="0" y="7" width="3" height="5" rx="1"/>
+        <rect x="4.5" y="4.5" width="3" height="7.5" rx="1"/>
+        <rect x="9" y="2" width="3" height="10" rx="1"/>
+        <rect x="13.5" y="0" width="2.5" height="12" rx="1"/>
+      </svg>
+      <svg width="16" height="12" viewBox="0 0 16 12" fill="none" stroke="var(--ink)" stroke-width="1.5" stroke-linecap="round">
+        <path d="M1 4.5C4 1.5 12 1.5 15 4.5"/>
+        <path d="M3.5 7C5.5 5 10.5 5 12.5 7"/>
+        <circle cx="8" cy="10.5" r="1" fill="var(--ink)" stroke="none"/>
+      </svg>
+      <svg width="24" height="12" viewBox="0 0 24 12" fill="none">
+        <rect x=".5" y=".5" width="20" height="11" rx="3.5" stroke="var(--ink)" stroke-width="1"/>
+        <rect x="2" y="2" width="15" height="8" rx="2" fill="var(--ink)"/>
+        <path d="M21.5 4v4a2.5 2.5 0 000-4z" fill="var(--ink)"/>
+      </svg>
+    </div>
+  </div>
+
+  <!-- Page Header -->
+  <div class="page-header">
+    <div class="page-title">Profile</div>
+    <div class="header-actions">
+      <div class="icon-btn">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--ink)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M4 6h16M4 12h16M4 18h10"/>
+        </svg>
+      </div>
+      <div class="icon-btn">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--ink)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="3"/>
+          <path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/>
+        </svg>
+      </div>
+    </div>
+  </div>
+
+  <!-- Hero Profile Card -->
+  <div class="hero-card">
+    <div class="hero-blob1"></div>
+    <div class="hero-blob2"></div>
+    <div class="hero-top">
+      <div class="avatar-wrap">
+        <div class="avatar"><span class="avatar-initials">JD</span></div>
+        <div class="avatar-online"></div>
+      </div>
+      <div class="hero-info">
+        <div class="hero-name">Jordan Davis</div>
+        <div class="hero-handle">@jordand · Member since Jan 2024</div>
+        <div class="hero-goal-tag">
+          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3"/></svg>
+          <span class="hero-goal-text">High Protein Lean Bulk</span>
+        </div>
+      </div>
+      <div class="hero-edit-btn">Edit</div>
+    </div>
+    <div class="hero-stats">
+      <div class="hstat">
+        <div class="hstat-val">247</div>
+        <div class="hstat-label">Meals Logged</div>
+      </div>
+      <div class="hstat">
+        <div class="hstat-val">🔥 14</div>
+        <div class="hstat-label">Day Streak</div>
+      </div>
+      <div class="hstat">
+        <div class="hstat-val">8</div>
+        <div class="hstat-label">Badges</div>
+      </div>
+      <div class="hstat">
+        <div class="hstat-val">94%</div>
+        <div class="hstat-label">Goal Hit</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scrollable Body -->
+  <div class="scroll-body">
+
+    <!-- Streak -->
+    <div class="section-header">
+      <span class="section-title">This Week</span>
+      <span class="section-action">Full History →</span>
+    </div>
+    <div class="streak-card">
+      <div class="streak-flame">🔥</div>
+      <div class="streak-info">
+        <div class="streak-num">14 Days</div>
+        <div class="streak-label">Longest streak yet! Keep it up.</div>
+      </div>
+      <div class="streak-bar-wrap">
+        <div class="streak-days">
+          <div class="sday done">M</div>
+          <div class="sday done">T</div>
+          <div class="sday done">W</div>
+          <div class="sday done">T</div>
+          <div class="sday done">F</div>
+          <div class="sday done">S</div>
+          <div class="sday today">S</div>
+        </div>
+        <div class="streak-caption">7 / 7 days this week ✓</div>
+      </div>
+    </div>
+
+    <!-- Today's Macros -->
+    <div class="section-header">
+      <span class="section-title">Today's Macros</span>
+      <span class="section-action">Log Meal →</span>
+    </div>
+    <div class="macro-card">
+      <div class="ring-wrap">
+        <svg class="ring-svg" viewBox="0 0 80 80">
+          <!-- track -->
+          <circle cx="40" cy="40" r="32" fill="none" stroke="rgba(42,26,26,0.08)" stroke-width="10"/>
+          <!-- protein arc: 158/180g = 88% → 201 of 201 -->
+          <circle cx="40" cy="40" r="32" fill="none" stroke="#FF6B9D" stroke-width="10"
+            stroke-dasharray="176 201" stroke-dashoffset="0" stroke-linecap="round"/>
+          <!-- carbs arc -->
+          <circle cx="40" cy="40" r="32" fill="none" stroke="#FF9F1C" stroke-width="10"
+            stroke-dasharray="138 201" stroke-dashoffset="-178" stroke-linecap="round"/>
+          <!-- fats arc -->
+          <circle cx="40" cy="40" r="32" fill="none" stroke="#2EC4B6" stroke-width="10"
+            stroke-dasharray="60 201" stroke-dashoffset="-318" stroke-linecap="round"/>
+        </svg>
+        <div class="ring-center">
+          <div class="ring-pct">82%</div>
+          <div class="ring-sub">of goal</div>
+        </div>
+      </div>
+      <div class="macro-bars">
+        <div class="mbar-row">
+          <div class="mbar-label">Protein</div>
+          <div class="mbar-track">
+            <div class="mbar-fill" style="width:88%;background:#FF6B9D;"></div>
+          </div>
+          <div class="mbar-val">158g</div>
+        </div>
+        <div class="mbar-row">
+          <div class="mbar-label">Carbs</div>
+          <div class="mbar-track">
+            <div class="mbar-fill" style="width:72%;background:#FF9F1C;"></div>
+          </div>
+          <div class="mbar-val">172g</div>
+        </div>
+        <div class="mbar-row">
+          <div class="mbar-label">Fats</div>
+          <div class="mbar-track">
+            <div class="mbar-fill" style="width:60%;background:#2EC4B6;"></div>
+          </div>
+          <div class="mbar-val">39g</div>
+        </div>
+        <div class="mbar-row">
+          <div class="mbar-label">Calories</div>
+          <div class="mbar-track">
+            <div class="mbar-fill" style="width:82%;background:var(--red);"></div>
+          </div>
+          <div class="mbar-val">1966</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Body Stats -->
+    <div class="section-header">
+      <span class="section-title">Body Stats</span>
+      <span class="section-action">Update →</span>
+    </div>
+    <div class="body-grid">
+
+      <div class="bstat-card">
+        <div class="bstat-accent" style="background:#FF3347;"></div>
+        <div class="bstat-icon" style="background:#FFE0E3;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--red)" stroke-width="2.2" stroke-linecap="round"><path d="M12 2v20M2 12h20"/></svg>
+        </div>
+        <div><span class="bstat-val">178</span><span class="bstat-unit"> cm</span></div>
+        <div class="bstat-label">Height</div>
+      </div>
+
+      <div class="bstat-card">
+        <div class="bstat-accent" style="background:#FF9F1C;"></div>
+        <div class="bstat-icon" style="background:#FFF2DC;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#FF9F1C" stroke-width="2.2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/></svg>
+        </div>
+        <div><span class="bstat-val">76.4</span><span class="bstat-unit"> kg</span></div>
+        <div class="bstat-label">Weight</div>
+        <div class="bstat-delta">▲ +1.2 kg</div>
+      </div>
+
+      <div class="bstat-card">
+        <div class="bstat-accent" style="background:#2EC4B6;"></div>
+        <div class="bstat-icon" style="background:#D8F5F3;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#2EC4B6" stroke-width="2.2" stroke-linecap="round"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>
+        </div>
+        <div><span class="bstat-val">13.2</span><span class="bstat-unit"> %</span></div>
+        <div class="bstat-label">Body Fat</div>
+        <div class="bstat-delta down">▼ -0.8%</div>
+      </div>
+
+      <div class="bstat-card">
+        <div class="bstat-accent" style="background:#FF6B9D;"></div>
+        <div class="bstat-icon" style="background:#FFE0EE;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#FF6B9D" stroke-width="2.2" stroke-linecap="round"><path d="M6 4v16M18 4v16M6 12h12"/></svg>
+        </div>
+        <div><span class="bstat-val">24.1</span><span class="bstat-unit"> BMI</span></div>
+        <div class="bstat-label">BMI</div>
+        <div class="bstat-delta">Normal</div>
+      </div>
+
+    </div>
+
+    <!-- Weekly Calories Chart -->
+    <div class="section-header">
+      <span class="section-title">Weekly Calories</span>
+      <span class="section-action">This Week</span>
+    </div>
+    <div class="chart-card">
+      <div class="chart-header">
+        <div class="chart-title">Calorie Intake</div>
+        <div class="chart-avg">Avg <span>2,210 kcal</span></div>
+      </div>
+      <div class="chart-bars">
+        <div class="chart-col">
+          <div class="chart-bar-wrap"><div class="chart-bar" style="height:88%;background:#FFE0E3;"></div></div>
+          <div class="chart-day">M</div>
+        </div>
+        <div class="chart-col">
+          <div class="chart-bar-wrap"><div class="chart-bar" style="height:72%;background:#FFE0E3;"></div></div>
+          <div class="chart-day">T</div>
+        </div>
+        <div class="chart-col">
+          <div class="chart-bar-wrap"><div class="chart-bar" style="height:95%;background:#FFE0E3;"></div></div>
+          <div class="chart-day">W</div>
+        </div>
+        <div class="chart-col">
+          <div class="chart-bar-wrap"><div class="chart-bar" style="height:60%;background:#FFE0E3;"></div></div>
+          <div class="chart-day">T</div>
+        </div>
+        <div class="chart-col">
+          <div class="chart-bar-wrap"><div class="chart-bar" style="height:80%;background:#FFE0E3;"></div></div>
+          <div class="chart-day">F</div>
+        </div>
+        <div class="chart-col">
+          <div class="chart-bar-wrap"><div class="chart-bar" style="height:100%;background:#FFE0E3;"></div></div>
+          <div class="chart-day">S</div>
+        </div>
+        <div class="chart-col">
+          <div class="chart-bar-wrap"><div class="chart-bar today" style="height:68%;background:var(--red-light);"></div></div>
+          <div class="chart-day today">S</div>
+        </div>
+      </div>
+      <div class="chart-goal-line">
+        <div class="goal-line-bar"></div>
+        <div class="goal-line-label">Goal 2,400</div>
+      </div>
+    </div>
+
+    <!-- Achievements -->
+    <div class="section-header">
+      <span class="section-title">Achievements</span>
+      <span class="section-action">All 24 →</span>
+    </div>
+    <div class="badge-grid">
+      <div class="badge-item">
+        <div class="badge-circle earned">🔥<div class="badge-new"></div></div>
+        <div class="badge-name">14-Day Streak</div>
+      </div>
+      <div class="badge-item">
+        <div class="badge-circle earned">💪</div>
+        <div class="badge-name">Protein King</div>
+      </div>
+      <div class="badge-item">
+        <div class="badge-circle earned">🥗</div>
+        <div class="badge-name">Veggie Load</div>
+      </div>
+      <div class="badge-item">
+        <div class="badge-circle earned">⚡</div>
+        <div class="badge-name">First 100 Meals</div>
+      </div>
+      <div class="badge-item">
+        <div class="badge-circle earned">🏆</div>
+        <div class="badge-name">Goal Crusher</div>
+      </div>
+      <div class="badge-item">
+        <div class="badge-circle earned">🌅</div>
+        <div class="badge-name">Early Bird</div>
+      </div>
+      <div class="badge-item">
+        <div class="badge-circle locked">🧊</div>
+        <div class="badge-name locked">Ice Cold</div>
+      </div>
+      <div class="badge-item">
+        <div class="badge-circle locked">🌙</div>
+        <div class="badge-name locked">Night Owl</div>
+      </div>
+    </div>
+
+    <div style="height: 12px;"></div>
+
+  </div><!-- /scroll-body -->
+
+  <!-- Bottom Nav -->
+  <div class="bottom-nav">
+    <div class="nav-item">
+      <div class="nav-icon-wrap">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--ink-muted)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M3 9.5L12 3l9 6.5V20a1 1 0 01-1 1H4a1 1 0 01-1-1V9.5z"/>
+          <path d="M9 21V12h6v9"/>
+        </svg>
+      </div>
+      <span class="nav-label">Home</span>
+    </div>
+    <div class="nav-item">
+      <div class="nav-icon-wrap">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--ink-muted)" stroke-width="1.8" stroke-linecap="round">
+          <path d="M18 8h1a4 4 0 010 8h-1M2 8h16v9a4 4 0 01-4 4H6a4 4 0 01-4-4V8zM6 1v3M10 1v3M14 1v3"/>
+        </svg>
+      </div>
+      <span class="nav-label">Meals</span>
+    </div>
+    <div class="nav-item">
+      <div class="nav-icon-wrap">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--ink-muted)" stroke-width="1.8" stroke-linecap="round">
+          <path d="M3 7V5a2 2 0 012-2h2M17 3h2a2 2 0 012 2v2M21 17v2a2 2 0 01-2 2h-2M7 21H5a2 2 0 01-2-2v-2"/>
+          <rect x="8" y="8" width="8" height="8" rx="1"/>
+        </svg>
+      </div>
+      <span class="nav-label">Scan</span>
+    </div>
+    <div class="nav-item">
+      <div class="nav-icon-wrap">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--ink-muted)" stroke-width="1.8" stroke-linecap="round">
+          <circle cx="9" cy="8" r="3"/><circle cx="17" cy="8" r="3"/>
+          <path d="M2 20c0-3.3 3.1-6 7-6s7 2.7 7 6"/>
+          <path d="M17 14c2.2.4 4 2.5 4 5"/>
+        </svg>
+      </div>
+      <span class="nav-label">Community</span>
+    </div>
+    <div class="nav-item">
+      <div class="nav-icon-wrap active">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--red)" stroke-width="2" stroke-linecap="round">
+          <circle cx="12" cy="8" r="4"/>
+          <path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/>
+        </svg>
+      </div>
+      <span class="nav-label active">Profile</span>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>
