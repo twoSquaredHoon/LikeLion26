@@ -1,4 +1,4 @@
-import { NavigationContainer } from '@react-navigation/native';
+import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { View, Text } from 'react-native';
 import Svg, { Path, Circle, Rect } from 'react-native-svg';
@@ -57,7 +57,15 @@ function ProfileIcon({ color }: { color: string }) {
   );
 }
 
-function TabIcon({ Icon, label, focused }: { Icon: React.FC<{ color: string }>; label: string; focused: boolean }) {
+function TabIcon({
+  Icon,
+  label,
+  focused,
+}: {
+  Icon: React.FC<{ color: string }>;
+  label: string;
+  focused: boolean;
+}) {
   const color = focused ? colors.red : colors.inkMuted;
   return (
     <View style={{ alignItems: 'center', gap: 4 }}>
@@ -81,34 +89,47 @@ function TabIcon({ Icon, label, focused }: { Icon: React.FC<{ color: string }>; 
   );
 }
 
-export default function Navigation() {
+export default function BottomBar() {
   return (
-    <NavigationContainer>
-      <Tab.Navigator
-        screenOptions={{
-          headerShown: false,
-          tabBarShowLabel: false,
-          tabBarStyle: {
-            backgroundColor: colors.bg2,
-            borderTopWidth: 3,
-            borderTopColor: colors.border,
-            height: 90,
-            paddingBottom: 16,
-            paddingTop: 8,
-          },
-        }}
-      >
-        <Tab.Screen name="Home" component={HomeScreen}
-          options={{ tabBarIcon: ({ focused }) => <TabIcon Icon={HomeIcon} label="Home" focused={focused} /> }} />
-        <Tab.Screen name="DiningHalls" component={DiningHallsScreen}
-          options={{ tabBarIcon: ({ focused }) => <TabIcon Icon={DiningIcon} label="Dining" focused={focused} /> }} />
-        <Tab.Screen name="Scan" component={ScanScreen}
-          options={{ tabBarIcon: ({ focused }) => <TabIcon Icon={ScanIcon} label="Scan" focused={focused} /> }} />
-        <Tab.Screen name="Community" component={CommunityScreen}
-          options={{ tabBarIcon: ({ focused }) => <TabIcon Icon={CommunityIcon} label="Community" focused={focused} /> }} />
-        <Tab.Screen name="Profile" component={MyProfileScreen}
-          options={{ tabBarIcon: ({ focused }) => <TabIcon Icon={ProfileIcon} label="Profile" focused={focused} /> }} />
-      </Tab.Navigator>
-    </NavigationContainer>
+    <Tab.Navigator
+      screenOptions={{
+        headerShown: false,
+        tabBarShowLabel: false,
+        tabBarStyle: {
+          backgroundColor: colors.bg2,
+          borderTopWidth: 3,
+          borderTopColor: colors.border,
+          height: 90,
+          paddingBottom: 16,
+          paddingTop: 8,
+        },
+      }}
+    >
+      <Tab.Screen
+        name="Home"
+        component={HomeScreen}
+        options={{ tabBarIcon: ({ focused }) => <TabIcon Icon={HomeIcon} label="Home" focused={focused} /> }}
+      />
+      <Tab.Screen
+        name="DiningHalls"
+        component={DiningHallsScreen}
+        options={{ tabBarIcon: ({ focused }) => <TabIcon Icon={DiningIcon} label="Dining" focused={focused} /> }}
+      />
+      <Tab.Screen
+        name="Scan"
+        component={ScanScreen}
+        options={{ tabBarIcon: ({ focused }) => <TabIcon Icon={ScanIcon} label="Scan" focused={focused} /> }}
+      />
+      <Tab.Screen
+        name="Community"
+        component={CommunityScreen}
+        options={{ tabBarIcon: ({ focused }) => <TabIcon Icon={CommunityIcon} label="Community" focused={focused} /> }}
+      />
+      <Tab.Screen
+        name="Profile"
+        component={MyProfileScreen}
+        options={{ tabBarIcon: ({ focused }) => <TabIcon Icon={ProfileIcon} label="Profile" focused={focused} /> }}
+      />
+    </Tab.Navigator>
   );
 }
