@@ -20,6 +20,7 @@ type RootStackParamList = {
   Signup: undefined;
   Onboarding: undefined;
   Home: undefined;
+   Welcome: undefined;
 };
 
 type SignupScreenProps = {
@@ -105,7 +106,7 @@ export default function SignupScreen({ navigation }: SignupScreenProps) {
       // TODO: replace with real auth call, e.g. useAuthStore().signup(name, email, password)
       await new Promise(resolve => setTimeout(resolve, 1600));
       setSuccess(true);
-      setTimeout(() => navigation.replace('Onboarding'), 600);
+      setTimeout(() => navigation.replace('Welcome'), 600);
     } catch (err) {
       setEmailErr('An account with this email already exists');
     } finally {

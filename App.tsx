@@ -12,6 +12,8 @@ import ResetPasswordScreen from './src/screens/ResetPasswordScreen';
 import HomeScreen from './src/screens/HomeScreen';
 import HomeScreenMealConfirmed from './src/screens/HomeScreenMealConfirmed';
 import HomeScreenReview from './src/screens/HomeScreenReview';
+import BirthdayScreen from './src/screens/BirthdayScreen';
+import WelcomeScreen from './src/screens/WelcomeScreen';
 
 export type RootStackParamList = {
   Login: undefined;
@@ -23,6 +25,9 @@ export type RootStackParamList = {
   ResetPassword: undefined;
   MealConfirmed: undefined;
   Review: undefined;
+  Welcome: undefined;
+  Birthday: undefined;
+  
 };
 
 const Stack = createStackNavigator<RootStackParamList>();
@@ -44,6 +49,8 @@ export default function App() {
           <Stack.Screen name="ResetPassword"  component={ResetPasswordScreen} />
           <Stack.Screen name="MealConfirmed"  component={HomeScreenMealConfirmed} />
           <Stack.Screen name="Review"         component={HomeScreenReview} options={{ gestureEnabled: false }} />
+          <Stack.Screen name="Welcome" component={WelcomeScreen} />
+          <Stack.Screen name="Birthday" component={BirthdayScreen} />
         </Stack.Navigator>
       </NavigationContainer>
     </SafeAreaProvider>
