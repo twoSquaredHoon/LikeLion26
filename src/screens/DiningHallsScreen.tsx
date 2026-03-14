@@ -13,6 +13,9 @@ import {
 } from 'react-native';
 import Svg, { Path } from 'react-native-svg';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useNavigation } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { RootStackParamList } from '../../App';
 
 // ─── Theme ────────────────────────────────────────────────────────────────────
 
@@ -77,7 +80,7 @@ const DINING_HALLS: DiningHall[] = [
     emojiBg: '#FFE8D6',
     status: 'open',
     hours: 'Closes 8:00 PM',
-    aiPickLabel: 'AI Pick · High Protein',
+    aiPickLabel: 'High Protein',
     aiPickName: 'Roasted Turkey Recovery',
     mapsUrl: 'https://www.google.com/maps/place/Gordon+Dining+and+Event+Center/@43.0711999,-89.4011868,16z/data=!3m1!4b1!4m6!3m5!1s0x8807acccaa79ac4b:0xc41dfe34820883a9!8m2!3d43.071196!4d-89.3986119!16s%2Fg%2F11b7r6fxl7?entry=ttu&g_ep=EgoyMDI2MDMxMS4wIKXMDSoASAFQAw%3D%3D',
     menus: {
@@ -149,7 +152,7 @@ const DINING_HALLS: DiningHall[] = [
     emojiBg: '#E8F4FF',
     status: 'open',
     hours: 'Closes 9:00 PM',
-    aiPickLabel: 'AI Pick · Balanced Meal',
+    aiPickLabel: 'Balanced Meal',
     aiPickName: 'Giardiniera Chicken Pasta',
     mapsUrl: 'https://www.google.com/maps/place/Rheta\'s+Market/@43.073974,-89.404274,16z/data=!3m1!4b1!4m6!3m5!1s0x8807acca4b2a8c4b:0x8769af98847c0415!8m2!3d43.0739701!4d-89.4016991!16s%2Fg%2F11c58twwd0?entry=ttu&g_ep=EgoyMDI2MDMxMS4wIKXMDSoASAFQAw%3D%3D',
     menus: {
@@ -203,7 +206,7 @@ const DINING_HALLS: DiningHall[] = [
     emojiBg: '#E8FFE8',
     status: 'soon',
     hours: 'Closes 2:30 PM',
-    aiPickLabel: 'AI Pick · Lean & Clean',
+    aiPickLabel: 'Lean & Clean',
     aiPickName: 'Atlantic Salmon Power Bowl',
     mapsUrl: 'https://www.google.com/maps/place/Liz\'s+Market/@43.0767289,-89.4095358,16z/data=!3m1!4b1!4m6!3m5!1s0x8807adcdda80c29d:0xe3f83313cf2d6a59!8m2!3d43.076725!4d-89.4069609!16s%2Fg%2F12ml2vlyd?entry=ttu&g_ep=EgoyMDI2MDMxMS4wIKXMDSoASAFQAw%3D%3D',
     menus: {
@@ -253,7 +256,7 @@ const DINING_HALLS: DiningHall[] = [
     emojiBg: '#E8F0FF',
     status: 'open',
     hours: 'Closes 7:30 PM',
-    aiPickLabel: 'AI Pick · Comfort Fuel',
+    aiPickLabel: 'Comfort Fuel',
     aiPickName: 'Beef Stew & Sourdough',
     mapsUrl: 'https://www.google.com/maps/place/Four+Lakes+Market/@43.0777477,-89.4203371,17z/data=!3m1!4b1!4m6!3m5!1s0x8807ac9566b34807:0x16e0208ca98cbfa!8m2!3d43.0777438!4d-89.4177622!16s%2Fg%2F11bc7ryb0g?entry=ttu&g_ep=EgoyMDI2MDMxMS4wIKXMDSoASAFQAw%3D%3D',
     menus: {
@@ -306,7 +309,7 @@ const DINING_HALLS: DiningHall[] = [
     emojiBg: '#FFF0E8',
     status: 'closed',
     hours: 'Opens 5:00 PM',
-    aiPickLabel: 'AI Pick · Bold Flavors',
+    aiPickLabel: 'Bold Flavors',
     aiPickName: 'Taco Night Combo',
     closedNote: 'Closed · Opens today at 5:00 PM',
     mapsUrl: 'https://www.google.com/maps/place/Carson\'s+Market/@43.0767289,-89.4095358,16z/data=!4m6!3m5!1s0x8807acb895b5c825:0x560f53526b34c7b0!8m2!3d43.0771572!4d-89.4113975!16s%2Fg%2F1q6cn9qrx?entry=ttu&g_ep=EgoyMDI2MDMxMS4wIKXMDSoASAFQAw%3D%3D',
@@ -362,7 +365,7 @@ const DINING_HALLS: DiningHall[] = [
     emojiBg: '#F5E8FF',
     status: 'closed',
     hours: 'Opens 11:00 AM',
-    aiPickLabel: 'AI Pick · Plant Based',
+    aiPickLabel: 'Plant Based',
     aiPickName: 'Garden Power Bowl',
     closedNote: 'Closed · Opens tomorrow at 11:00 AM',
     mapsUrl: 'https://www.google.com/maps/place/Lowell+Market/@43.0762606,-89.3983387,17z/data=!3m1!4b1!4m6!3m5!1s0x88065319694f98ad:0xcc0cdb26603e741a!8m2!3d43.0762567!4d-89.3957638!16s%2Fg%2F11rrrmprcf?entry=ttu&g_ep=EgoyMDI2MDMxMS4wIKXMDSoASAFQAw%3D%3D',
@@ -497,12 +500,6 @@ const MealPane = ({
   menu: MealMenu;
 }) => (
   <View>
-    <View style={styles.menuSectionLabel}>
-      <Text style={styles.menuSectionTitle}>
-        {meal.charAt(0).toUpperCase() + meal.slice(1)} Menu
-      </Text>
-      <Text style={styles.menuCount}>{menu.count} items</Text>
-    </View>
     <View style={styles.menuItems}>
       {menu.categories.map((cat, i) => (
         <MenuCategorySection key={i} {...cat} />
@@ -545,9 +542,10 @@ const StatusBadge = ({ status }: { status: StatusType }) => {
 // ─── Dining Hall Card ─────────────────────────────────────────────────────────
 
 const DiningHallCard = ({ hall }: { hall: DiningHall }) => {
-  const [expanded, setExpanded] = useState(hall.id === 'gordon');
+  const [expanded, setExpanded] = useState(false);
   const [activeMeal, setActiveMeal] = useState<MealType>('breakfast');
   const rotateAnim = useRef(new Animated.Value(expanded ? 1 : 0)).current;
+  const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
 
   const toggleExpand = () => {
     const toValue = expanded ? 0 : 1;
@@ -590,9 +588,11 @@ const DiningHallCard = ({ hall }: { hall: DiningHall }) => {
         </View>
 
         <View style={styles.hallRight}>
-          <Animated.View style={[styles.hallChevron, { transform: [{ rotate }] }]}>
-            <ChevronIcon />
-          </Animated.View>
+          <View style={styles.hallChevron}>
+            <Animated.View style={{ transform: [{ rotate }] }}>
+              <ChevronIcon />
+            </Animated.View>
+          </View>
         </View>
       </TouchableOpacity>
 
@@ -608,7 +608,7 @@ const DiningHallCard = ({ hall }: { hall: DiningHall }) => {
 
           {/* AI combo button */}
           <View style={styles.comboBtnWrap}>
-            <TouchableOpacity style={styles.comboBtn} activeOpacity={0.85}>
+            <TouchableOpacity style={styles.comboBtn} activeOpacity={0.85} onPress={() => navigation.navigate('MealConfirmed')}>
               <View style={styles.comboBtnLeft}>
                 <View style={styles.comboIconWrap}>
                   <Text style={styles.comboIcon}>⭐</Text>
@@ -799,10 +799,6 @@ const styles = StyleSheet.create({
     borderColor: C.border,
     borderRadius: 22,
     backgroundColor: C.bg2,
-    ...Platform.select({
-      ios: { shadowColor: C.border, shadowOffset: { width: 3, height: 3 }, shadowOpacity: 1, shadowRadius: 0 },
-      android: { elevation: 3 },
-    }),
   },
   sortLabel: {
     fontSize: 10,
@@ -965,10 +961,6 @@ const styles = StyleSheet.create({
     borderColor: C.border,
     alignItems: 'center',
     justifyContent: 'center',
-    ...Platform.select({
-      ios: { shadowColor: C.border, shadowOffset: { width: 2, height: 2 }, shadowOpacity: 1, shadowRadius: 0 },
-      android: { elevation: 2 },
-    }),
   },
 
   // Status badge
@@ -1156,11 +1148,11 @@ const styles = StyleSheet.create({
   menuGrid: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    gap: 7,
+    gap: 12,
     marginBottom: 2,
   },
   menuItem: {
-    width: '47.5%',
+    width: '47%',
     backgroundColor: C.menuItem,
     borderWidth: 2,
     borderColor: C.border,
@@ -1168,12 +1160,9 @@ const styles = StyleSheet.create({
     padding: 9,
     paddingHorizontal: 10,
     flexDirection: 'row',
-    alignItems: 'flex-start',
+    alignItems: 'center',
     gap: 8,
-    ...Platform.select({
-      ios: { shadowColor: C.border, shadowOffset: { width: 2, height: 2 }, shadowOpacity: 1, shadowRadius: 0 },
-      android: { elevation: 2 },
-    }),
+    minHeight: 44,
   },
   menuItemName: {
     fontSize: 11,
@@ -1192,10 +1181,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     flexShrink: 0,
-    ...Platform.select({
-      ios: { shadowColor: C.border, shadowOffset: { width: 1, height: 1 }, shadowOpacity: 1, shadowRadius: 0 },
-      android: { elevation: 1 },
-    }),
   },
   starBtnStarred: {
     backgroundColor: '#FFF2DC',
