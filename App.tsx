@@ -7,14 +7,17 @@ import SignupScreen from './src/screens/SignupScreen';
 import OnboardingScreen from './src/screens/OnboardingScreen';
 import BottomBar from './src/navigation/BottomBar';
 import ForgotPasswordScreen from './src/screens/ForgotPasswordScreen';
-
+import VerifyEmailScreen from './src/screens/VerifyEmailScreen';
+import ResetPasswordScreen from './src/screens/ResetPasswordScreen';
 
 export type RootStackParamList = {
   Login: undefined;
   Signup: undefined;
   Onboarding: undefined;
   Home: undefined;
-  ForgotPassword: undefined;        // resolves to BottomBar (all tabs)
+  ForgotPassword: undefined; 
+  VerifyEmail: undefined;      
+  ResetPassword: undefined;          // resolves to BottomBar (all tabs)
 };
 
 const Stack = createStackNavigator<RootStackParamList>();
@@ -31,6 +34,8 @@ export default function App() {
         <Stack.Screen name="Onboarding" component={OnboardingScreen} />
         <Stack.Screen name="Home"       component={BottomBar} />
         <Stack.Screen name="ForgotPassword" component={ForgotPasswordScreen} />
+        <Stack.Screen name="VerifyEmail" component={VerifyEmailScreen} />
+        <Stack.Screen name="ResetPassword" component={ResetPasswordScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );

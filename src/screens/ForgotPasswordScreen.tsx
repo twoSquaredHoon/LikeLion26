@@ -20,6 +20,7 @@ type RootStackParamList = {
   Onboarding: undefined;
   Home: undefined;
   ForgotPassword: undefined;
+  VerifyEmail: undefined;  
 };
 
 type ForgotPasswordScreenProps = {
@@ -66,6 +67,7 @@ export default function ForgotPasswordScreen({ navigation }: ForgotPasswordScree
       // TODO: replace with real API call e.g. sendPasswordResetEmail(email)
       await new Promise(resolve => setTimeout(resolve, 1500));
       setSent(true);
+      setTimeout(() => navigation.navigate('VerifyEmail'), 600);
     } catch (err) {
       setEmailErr('Something went wrong. Please try again.');
     } finally {
