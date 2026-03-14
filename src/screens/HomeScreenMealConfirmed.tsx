@@ -301,7 +301,11 @@ export default function HomeScreenMealConfirmed() {
 
           {/* Log button */}
           <View style={styles.logBtnWrap}>
-            <TouchableOpacity style={styles.logBtn} onPress={() => navigation.navigate('Review')} activeOpacity={0.85}>
+            <TouchableOpacity
+              style={styles.logBtn}
+              onPress={() => navigation.navigate('Home')}
+              activeOpacity={0.85}
+            >
               <Svg width={20} height={20} viewBox="0 0 24 24">
                 <Path d="M12 5v14M5 12h14" stroke="white" strokeWidth={2.5} strokeLinecap="round" fill="none" />
               </Svg>
@@ -362,11 +366,10 @@ const styles = StyleSheet.create({
 
   foodList: { paddingHorizontal: 20, gap: 7 },
 
-  // Swipe action revealed on right
   swipeAction: {
     backgroundColor: COLORS.red,
     borderWidth: 2.5, borderColor: COLORS.border, borderRadius: 16,
-    marginLeft: 8, marginBottom: 0,
+    marginLeft: 8,
     width: 70, alignItems: 'center', justifyContent: 'center',
     shadowColor: COLORS.border, shadowOffset: { width: 3, height: 3 }, shadowOpacity: 1, shadowRadius: 0, elevation: 3,
   },
