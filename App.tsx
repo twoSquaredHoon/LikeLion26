@@ -1,7 +1,7 @@
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 import LoginScreen from './src/screens/LoginScreen';
 import SignupScreen from './src/screens/SignupScreen';
 import OnboardingScreen from './src/screens/OnboardingScreen';
@@ -15,28 +15,30 @@ export type RootStackParamList = {
   Signup: undefined;
   Onboarding: undefined;
   Home: undefined;
-  ForgotPassword: undefined; 
-  VerifyEmail: undefined;      
-  ResetPassword: undefined;          // resolves to BottomBar (all tabs)
+  ForgotPassword: undefined;
+  VerifyEmail: undefined;
+  ResetPassword: undefined;
 };
 
 const Stack = createStackNavigator<RootStackParamList>();
 
 export default function App() {
   return (
-    <NavigationContainer>
-      <Stack.Navigator
-        initialRouteName="Login"          // ← Login is the first screen
-        screenOptions={{ headerShown: false }}
-      >
-        <Stack.Screen name="Login"      component={LoginScreen} />
-        <Stack.Screen name="Signup"     component={SignupScreen} />
-        <Stack.Screen name="Onboarding" component={OnboardingScreen} />
-        <Stack.Screen name="Home"       component={BottomBar} />
-        <Stack.Screen name="ForgotPassword" component={ForgotPasswordScreen} />
-        <Stack.Screen name="VerifyEmail" component={VerifyEmailScreen} />
-        <Stack.Screen name="ResetPassword" component={ResetPasswordScreen} />
-      </Stack.Navigator>
-    </NavigationContainer>
+    <SafeAreaProvider>
+      <NavigationContainer>
+        <Stack.Navigator
+          initialRouteName="Login"
+          screenOptions={{ headerShown: false }}
+        >
+          <Stack.Screen name="Login"          component={LoginScreen} />
+          <Stack.Screen name="Signup"         component={SignupScreen} />
+          <Stack.Screen name="Onboarding"     component={OnboardingScreen} />
+          <Stack.Screen name="Home"           component={BottomBar} />
+          <Stack.Screen name="ForgotPassword" component={ForgotPasswordScreen} />
+          <Stack.Screen name="VerifyEmail"    component={VerifyEmailScreen} />
+          <Stack.Screen name="ResetPassword"  component={ResetPasswordScreen} />
+        </Stack.Navigator>
+      </NavigationContainer>
+    </SafeAreaProvider>
   );
 }
