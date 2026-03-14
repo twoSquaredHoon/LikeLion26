@@ -50,7 +50,7 @@ export default function HomeScreenReview() {
           </View>
           <TouchableOpacity
             style={styles.closeBtn}
-            onPress={() => navigation.navigate('Home')}
+            onPress={() => navigation.popToTop()}
             activeOpacity={0.8}
           >
             <Svg width={14} height={14} viewBox="0 0 24 24">

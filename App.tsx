@@ -19,7 +19,7 @@ export default function App() {
       <Stack.Navigator screenOptions={{ headerShown: false }}>
         <Stack.Screen name="Home"          component={HomeScreen} />
         <Stack.Screen name="MealConfirmed" component={HomeScreenMealConfirmed} />
-        <Stack.Screen name="Review"        component={HomeScreenReview} />
+        <Stack.Screen name="Review" component={HomeScreenReview} options={{ gestureEnabled: false }} />
       </Stack.Navigator>
     </NavigationContainer>
   );
