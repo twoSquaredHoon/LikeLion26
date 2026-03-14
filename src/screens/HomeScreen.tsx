@@ -1,4 +1,7 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigation } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { RootStackParamList } from '../../App';
 import {
   View,
   Text,
@@ -312,7 +315,7 @@ const GoalsCard = () => {
   );
 };
 
-const HallCard = ({ hall }: { hall: DiningHall }) => {
+const HallCard = ({ hall, navigation }: { hall: DiningHall; navigation: StackNavigationProp<RootStackParamList> }) => {
   const [expanded, setExpanded] = useState(false);
   const animation = useState(new Animated.Value(0))[0];
 
@@ -418,7 +421,7 @@ const HallCard = ({ hall }: { hall: DiningHall }) => {
             </View>
 
             {/* Log button */}
-            <TouchableOpacity style={styles.logBtn} activeOpacity={0.85}>
+            <TouchableOpacity style={styles.logBtn} onPress={() => navigation.navigate('MealConfirmed')} activeOpacity={0.85}>
               <Svg width={16} height={16} viewBox="0 0 24 24">
                 <Path
                   d="M12 5v14M5 12h14"
@@ -442,6 +445,7 @@ const HallCard = ({ hall }: { hall: DiningHall }) => {
 
 // ─── Main Screen ──────────────────────────────────────────────────────────────
 export default function HomeScreen() {
+  const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
   return (
     <SafeAreaView style={styles.safeArea}>
       <StatusBar barStyle="dark-content" backgroundColor={COLORS.beige} />
@@ -463,7 +467,7 @@ export default function HomeScreen() {
           showsVerticalScrollIndicator={false}
         >
           {DINING_HALLS.map((hall) => (
-            <HallCard key={hall.id} hall={hall} />
+            <HallCard key={hall.id} hall={hall} navigation={navigation} />
           ))}
         </ScrollView>
 
