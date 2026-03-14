@@ -9,6 +9,9 @@ import {
   StatusBar,
 } from 'react-native';
 import Svg, { Path, Rect, Circle } from 'react-native-svg';
+import { useNavigation } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { RootStackParamList } from '../../App';
 
 // ─── Constants ────────────────────────────────────────────────────────────────
 const COLORS = {
@@ -157,6 +160,7 @@ const PlateIllustration = () => (
 
 // ─── Main Screen ──────────────────────────────────────────────────────────────
 export default function HomeScreenMealConfirmed() {
+  const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
   return (
     <SafeAreaView style={styles.safeArea}>
       <StatusBar barStyle="dark-content" backgroundColor={COLORS.beige} />
@@ -280,7 +284,7 @@ export default function HomeScreenMealConfirmed() {
 
           {/* Log button */}
           <View style={styles.logBtnWrap}>
-            <TouchableOpacity style={styles.logBtn} activeOpacity={0.85}>
+            <TouchableOpacity style={styles.logBtn} onPress={() => navigation.navigate('Review')} activeOpacity={0.85}>
               <Svg width={20} height={20} viewBox="0 0 24 24">
                 <Path
                   d="M12 5v14M5 12h14"
