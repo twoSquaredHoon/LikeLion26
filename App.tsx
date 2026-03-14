@@ -9,6 +9,9 @@ import BottomBar from './src/navigation/BottomBar';
 import ForgotPasswordScreen from './src/screens/ForgotPasswordScreen';
 import VerifyEmailScreen from './src/screens/VerifyEmailScreen';
 import ResetPasswordScreen from './src/screens/ResetPasswordScreen';
+import HomeScreen from './src/screens/HomeScreen';
+import HomeScreenMealConfirmed from './src/screens/HomeScreenMealConfirmed';
+import HomeScreenReview from './src/screens/HomeScreenReview';
 
 export type RootStackParamList = {
   Login: undefined;
@@ -18,6 +21,8 @@ export type RootStackParamList = {
   ForgotPassword: undefined;
   VerifyEmail: undefined;
   ResetPassword: undefined;
+  MealConfirmed: undefined;
+  Review: undefined;
 };
 
 const Stack = createStackNavigator<RootStackParamList>();
@@ -37,6 +42,8 @@ export default function App() {
           <Stack.Screen name="ForgotPassword" component={ForgotPasswordScreen} />
           <Stack.Screen name="VerifyEmail"    component={VerifyEmailScreen} />
           <Stack.Screen name="ResetPassword"  component={ResetPasswordScreen} />
+          <Stack.Screen name="MealConfirmed"  component={HomeScreenMealConfirmed} />
+          <Stack.Screen name="Review"         component={HomeScreenReview} options={{ gestureEnabled: false }} />
         </Stack.Navigator>
       </NavigationContainer>
     </SafeAreaProvider>

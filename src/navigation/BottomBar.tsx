@@ -57,15 +57,7 @@ function ProfileIcon({ color }: { color: string }) {
   );
 }
 
-function TabIcon({
-  Icon,
-  label,
-  focused,
-}: {
-  Icon: React.FC<{ color: string }>;
-  label: string;
-  focused: boolean;
-}) {
+function TabIcon({ Icon, label, focused }: { Icon: React.FC<{ color: string }>; label: string; focused: boolean }) {
   const color = focused ? colors.red : colors.inkMuted;
   return (
     <View style={{ alignItems: 'center', gap: 4 }}>
@@ -105,31 +97,16 @@ export default function BottomBar() {
         },
       }}
     >
-      <Tab.Screen
-        name="Home"
-        component={HomeScreen}
-        options={{ tabBarIcon: ({ focused }) => <TabIcon Icon={HomeIcon} label="Home" focused={focused} /> }}
-      />
-      <Tab.Screen
-        name="DiningHalls"
-        component={DiningHallsScreen}
-        options={{ tabBarIcon: ({ focused }) => <TabIcon Icon={DiningIcon} label="Dining" focused={focused} /> }}
-      />
-      <Tab.Screen
-        name="Scan"
-        component={ScanScreen}
-        options={{ tabBarIcon: ({ focused }) => <TabIcon Icon={ScanIcon} label="Scan" focused={focused} /> }}
-      />
-      <Tab.Screen
-        name="Community"
-        component={CommunityScreen}
-        options={{ tabBarIcon: ({ focused }) => <TabIcon Icon={CommunityIcon} label="Community" focused={focused} /> }}
-      />
-      <Tab.Screen
-        name="Profile"
-        component={MyProfileScreen}
-        options={{ tabBarIcon: ({ focused }) => <TabIcon Icon={ProfileIcon} label="Profile" focused={focused} /> }}
-      />
+      <Tab.Screen name="Home" component={HomeScreen}
+        options={{ tabBarIcon: ({ focused }) => <TabIcon Icon={HomeIcon} label="Home" focused={focused} /> }} />
+      <Tab.Screen name="DiningHalls" component={DiningHallsScreen}
+        options={{ tabBarIcon: ({ focused }) => <TabIcon Icon={DiningIcon} label="Dining" focused={focused} /> }} />
+      <Tab.Screen name="Scan" component={ScanScreen}
+        options={{ tabBarIcon: ({ focused }) => <TabIcon Icon={ScanIcon} label="Scan" focused={focused} /> }} />
+      <Tab.Screen name="Community" component={CommunityScreen}
+        options={{ tabBarIcon: ({ focused }) => <TabIcon Icon={CommunityIcon} label="Community" focused={focused} /> }} />
+      <Tab.Screen name="Profile" component={MyProfileScreen}
+        options={{ tabBarIcon: ({ focused }) => <TabIcon Icon={ProfileIcon} label="Profile" focused={focused} /> }} />
     </Tab.Navigator>
   );
 }
