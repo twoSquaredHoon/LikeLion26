@@ -17,6 +17,7 @@ import WelcomeScreen from './src/screens/WelcomeScreen';
 import GenderScreen from './src/screens/GenderScreen';
 import HeightScreen from './src/screens/HeightScreen';
 import WeightScreen from './src/screens/WeightScreen';
+import GoalWeightScreen from './src/screens/GoalWeightScreen';
 
 export type RootStackParamList = {
   Login: undefined;
@@ -33,6 +34,7 @@ export type RootStackParamList = {
   Gender: undefined;
   Height: undefined;
   Weight: undefined;
+  GoalWeight: undefined;
   
 };
 
@@ -60,6 +62,7 @@ export default function App() {
           <Stack.Screen name="Gender" component={GenderScreen} />
           <Stack.Screen name="Height" component={HeightScreen} />
           <Stack.Screen name="Weight" component={WeightScreen} />
+          <Stack.Screen name="GoalWeight" component={GoalWeightScreen} />
         </Stack.Navigator>
       </NavigationContainer>
     </SafeAreaProvider>
