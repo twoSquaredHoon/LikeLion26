@@ -22,6 +22,7 @@ type RootStackParamList = {
   VerifyEmail: undefined;
   Welcome: undefined;
   Birthday: undefined;
+  Gender: undefined;
 };
 
 type BirthdayScreenProps = {
@@ -245,7 +246,7 @@ export default function BirthdayScreen({ navigation }: BirthdayScreenProps) {
       {/* ── Continue Button ── */}
       <TouchableOpacity
         style={styles.continueBtn}
-        onPress={() => navigation.navigate('Home')}
+        onPress={() => navigation.navigate('Gender')}
         activeOpacity={0.85}
       >
         <Text style={styles.continueBtnText}>Continue →</Text>

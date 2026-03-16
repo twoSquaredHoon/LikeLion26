@@ -14,6 +14,9 @@ import HomeScreenMealConfirmed from './src/screens/HomeScreenMealConfirmed';
 import HomeScreenReview from './src/screens/HomeScreenReview';
 import BirthdayScreen from './src/screens/BirthdayScreen';
 import WelcomeScreen from './src/screens/WelcomeScreen';
+import GenderScreen from './src/screens/GenderScreen';
+import HeightScreen from './src/screens/HeightScreen';
+import WeightScreen from './src/screens/WeightScreen';
 
 export type RootStackParamList = {
   Login: undefined;
@@ -27,6 +30,9 @@ export type RootStackParamList = {
   Review: undefined;
   Welcome: undefined;
   Birthday: undefined;
+  Gender: undefined;
+  Height: undefined;
+  Weight: undefined;
   
 };
 
@@ -51,6 +57,9 @@ export default function App() {
           <Stack.Screen name="Review"         component={HomeScreenReview} options={{ gestureEnabled: false }} />
           <Stack.Screen name="Welcome" component={WelcomeScreen} />
           <Stack.Screen name="Birthday" component={BirthdayScreen} />
+          <Stack.Screen name="Gender" component={GenderScreen} />
+          <Stack.Screen name="Height" component={HeightScreen} />
+          <Stack.Screen name="Weight" component={WeightScreen} />
         </Stack.Navigator>
       </NavigationContainer>
     </SafeAreaProvider>
