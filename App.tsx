@@ -8,6 +8,8 @@ import OnboardingScreen from './src/screens/OnboardingScreen';
 import BottomBar from './src/navigation/BottomBar';
 import ForgotPasswordScreen from './src/screens/ForgotPasswordScreen';
 import HomeScreenMealConfirmed from './src/screens/HomeScreen/HomeScreenMealConfirmed';
+import HomeScreenDish from './src/screens/HomeScreen/HomeScreenDish';
+import HomeScreenReview from './src/screens/HomeScreen/HomeScreenReview';
 
 export type RootStackParamList = {
   Login: undefined;
@@ -16,6 +18,8 @@ export type RootStackParamList = {
   Home: undefined;
   ForgotPassword: undefined;
   MealConfirmed: undefined;
+  Dish: undefined;
+  Review: undefined;
 };
 
 const Stack = createStackNavigator<RootStackParamList>();
@@ -34,6 +38,8 @@ export default function App() {
           <Stack.Screen name="Home"           component={BottomBar} />
           <Stack.Screen name="ForgotPassword" component={ForgotPasswordScreen} />
           <Stack.Screen name="MealConfirmed"  component={HomeScreenMealConfirmed} />
+          <Stack.Screen name="Dish"           component={HomeScreenDish} />
+          <Stack.Screen name="Review"         component={HomeScreenReview} />
         </Stack.Navigator>
       </NavigationContainer>
     </SafeAreaProvider>

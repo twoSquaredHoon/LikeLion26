@@ -329,7 +329,7 @@ export default function HomeScreenMealConfirmed() {
             <View style={styles.logBtnWrap}>
               <TouchableOpacity
                 style={styles.logBtn}
-                onPress={() => navigation.navigate('Home')}
+                onPress={() => navigation.navigate('Dish')}
                 activeOpacity={0.85}
               >
                 <Svg width={20} height={20} viewBox="0 0 24 24">
