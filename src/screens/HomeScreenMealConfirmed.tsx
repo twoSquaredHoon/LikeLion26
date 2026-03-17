@@ -61,7 +61,7 @@ const INITIAL_ITEMS: FoodItem[] = [
     macros: [{ label: 'P', value: '44g', type: 'p' }, { label: 'F', value: '4g', type: 'f' }],
     alternatives: [
       { name: 'Grilled Chicken Breast', sub: '5 oz · Grill Station', kcal: 195, dotBg: '#FDEBD6', dotBorder: '#C8782A', blobColor: '#C8784A', blobStyle: { borderRadius: 28, width: 26, height: 20 }, macros: [{ label: 'P', value: '40g', type: 'p' }, { label: 'F', value: '3g', type: 'f' }] },
-      { name: 'Baked Salmon Fillet',    sub: '4 oz · Seafood Station', kcal: 230, dotBg: '#FFE8DC', dotBorder: '#E87040', blobColor: '#E87040', blobStyle: { borderRadius: 28, width: 26, height: 18 }, macros: [{ label: 'P', value: '32g', type: 'p' }, { label: 'F', value: '12g', type: 'f' }] },
+      { name: 'Baked Salmon Fillet', sub: '4 oz · Seafood Station', kcal: 230, dotBg: '#FFE8DC', dotBorder: '#E87040', blobColor: '#E87040', blobStyle: { borderRadius: 28, width: 26, height: 18 }, macros: [{ label: 'P', value: '32g', type: 'p' }, { label: 'F', value: '12g', type: 'f' }] },
     ],
   },
   {
@@ -72,8 +72,8 @@ const INITIAL_ITEMS: FoodItem[] = [
     blobStyle: { borderRadius: 999, width: 26, height: 20 },
     macros: [{ label: 'C', value: '34g', type: 'c' }, { label: 'P', value: '4g', type: 'p' }],
     alternatives: [
-      { name: 'Quinoa',        sub: '¾ cup · Grain Station',  kcal: 180, dotBg: '#F5F0E0', dotBorder: '#A09060', blobColor: '#D8C890', blobStyle: { borderRadius: 999, width: 24, height: 22 }, macros: [{ label: 'C', value: '30g', type: 'c' }, { label: 'P', value: '6g', type: 'p' }] },
-      { name: 'Pasta',         sub: '¾ cup · Pasta Station',  kcal: 220, dotBg: '#FDF6E0', dotBorder: '#C8982A', blobColor: '#E8C87A', blobStyle: { borderRadius: 999, width: 28, height: 20 }, macros: [{ label: 'C', value: '44g', type: 'c' }, { label: 'P', value: '7g', type: 'p' }] },
+      { name: 'Quinoa', sub: '¾ cup · Grain Station', kcal: 180, dotBg: '#F5F0E0', dotBorder: '#A09060', blobColor: '#D8C890', blobStyle: { borderRadius: 999, width: 24, height: 22 }, macros: [{ label: 'C', value: '30g', type: 'c' }, { label: 'P', value: '6g', type: 'p' }] },
+      { name: 'Pasta', sub: '¾ cup · Pasta Station', kcal: 220, dotBg: '#FDF6E0', dotBorder: '#C8982A', blobColor: '#E8C87A', blobStyle: { borderRadius: 999, width: 28, height: 20 }, macros: [{ label: 'C', value: '44g', type: 'c' }, { label: 'P', value: '7g', type: 'p' }] },
     ],
   },
   {
@@ -84,8 +84,8 @@ const INITIAL_ITEMS: FoodItem[] = [
     blobStyle: { borderRadius: 999, width: 24, height: 20 },
     macros: [{ label: 'C', value: '42g', type: 'c' }, { label: 'F', value: '2g', type: 'f' }],
     alternatives: [
-      { name: 'Mashed Potatoes', sub: '½ cup · Hot Station',    kcal: 210, dotBg: '#FEFCE0', dotBorder: '#C8A800', blobColor: '#F0E080', blobStyle: { borderRadius: 999, width: 28, height: 22 }, macros: [{ label: 'C', value: '38g', type: 'c' }, { label: 'F', value: '6g', type: 'f' }] },
-      { name: 'Sweet Potato',    sub: '4 oz · Veggie Station',  kcal: 170, dotBg: '#FFE8DC', dotBorder: '#CC6600', blobColor: '#FF8040', blobStyle: { borderRadius: 999, width: 26, height: 20 }, macros: [{ label: 'C', value: '36g', type: 'c' }, { label: 'F', value: '1g', type: 'f' }] },
+      { name: 'Mashed Potatoes', sub: '½ cup · Hot Station', kcal: 210, dotBg: '#FEFCE0', dotBorder: '#C8A800', blobColor: '#F0E080', blobStyle: { borderRadius: 999, width: 28, height: 22 }, macros: [{ label: 'C', value: '38g', type: 'c' }, { label: 'F', value: '6g', type: 'f' }] },
+      { name: 'Sweet Potato', sub: '4 oz · Veggie Station', kcal: 170, dotBg: '#FFE8DC', dotBorder: '#CC6600', blobColor: '#FF8040', blobStyle: { borderRadius: 999, width: 26, height: 20 }, macros: [{ label: 'C', value: '36g', type: 'c' }, { label: 'F', value: '1g', type: 'f' }] },
     ],
   },
   {
@@ -96,8 +96,8 @@ const INITIAL_ITEMS: FoodItem[] = [
     blobStyle: { borderRadius: 999, width: 24, height: 18 },
     macros: [{ label: 'C', value: '16g', type: 'c' }, { label: 'F', value: '2g', type: 'f' }],
     alternatives: [
-      { name: 'Steamed Broccoli', sub: '1 cup · Veggie Station', kcal: 60,  dotBg: '#DCFCE7', dotBorder: '#16A34A', blobColor: '#5DAF6E', blobStyle: { borderRadius: 999, width: 24, height: 20 }, macros: [{ label: 'C', value: '10g', type: 'c' }, { label: 'P', value: '4g', type: 'p' }] },
-      { name: 'Green Beans',      sub: '3 oz · Veggie Station',  kcal: 50,  dotBg: '#DCFCE7', dotBorder: '#16A34A', blobColor: '#7CC870', blobStyle: { borderRadius: 999, width: 22, height: 16 }, macros: [{ label: 'C', value: '8g',  type: 'c' }, { label: 'P', value: '2g', type: 'p' }] },
+      { name: 'Steamed Broccoli', sub: '1 cup · Veggie Station', kcal: 60, dotBg: '#DCFCE7', dotBorder: '#16A34A', blobColor: '#5DAF6E', blobStyle: { borderRadius: 999, width: 24, height: 20 }, macros: [{ label: 'C', value: '10g', type: 'c' }, { label: 'P', value: '4g', type: 'p' }] },
+      { name: 'Green Beans', sub: '3 oz · Veggie Station', kcal: 50, dotBg: '#DCFCE7', dotBorder: '#16A34A', blobColor: '#7CC870', blobStyle: { borderRadius: 999, width: 22, height: 16 }, macros: [{ label: 'C', value: '8g', type: 'c' }, { label: 'P', value: '2g', type: 'p' }] },
     ],
   },
   {
@@ -108,8 +108,8 @@ const INITIAL_ITEMS: FoodItem[] = [
     blobStyle: { borderRadius: 999, width: 22, height: 22 },
     macros: [{ label: 'C', value: '16g', type: 'c' }, { label: 'P', value: '3g', type: 'p' }],
     alternatives: [
-      { name: 'Edamame',     sub: '½ cup · Salad Bar',      kcal: 120, dotBg: '#DCFCE7', dotBorder: '#16A34A', blobColor: '#86C890', blobStyle: { borderRadius: 999, width: 22, height: 18 }, macros: [{ label: 'P', value: '10g', type: 'p' }, { label: 'C', value: '10g', type: 'c' }] },
-      { name: 'Black Beans', sub: '½ cup · Salad Bar',      kcal: 110, dotBg: '#E8E0F0', dotBorder: '#604880', blobColor: '#806090', blobStyle: { borderRadius: 999, width: 22, height: 20 }, macros: [{ label: 'P', value: '7g',  type: 'p' }, { label: 'C', value: '20g', type: 'c' }] },
+      { name: 'Edamame', sub: '½ cup · Salad Bar', kcal: 120, dotBg: '#DCFCE7', dotBorder: '#16A34A', blobColor: '#86C890', blobStyle: { borderRadius: 999, width: 22, height: 18 }, macros: [{ label: 'P', value: '10g', type: 'p' }, { label: 'C', value: '10g', type: 'c' }] },
+      { name: 'Black Beans', sub: '½ cup · Salad Bar', kcal: 110, dotBg: '#E8E0F0', dotBorder: '#604880', blobColor: '#806090', blobStyle: { borderRadius: 999, width: 22, height: 20 }, macros: [{ label: 'P', value: '7g', type: 'p' }, { label: 'C', value: '20g', type: 'c' }] },
     ],
   },
 ];
@@ -209,6 +209,16 @@ export default function HomeScreenMealConfirmed() {
 
   const totalKcal = INITIAL_ITEMS.reduce((sum, _, i) => sum + getCurrentItem(i).kcal, 0);
 
+  const totalMacros = INITIAL_ITEMS.reduce(
+    (acc, _, i) => {
+      getCurrentItem(i).macros.forEach(m => {
+        acc[m.type] += parseInt(m.value, 10);
+      });
+      return acc;
+    },
+    { p: 0, c: 0, f: 0 }
+  );
+
   return (
     <SafeAreaView style={styles.safeArea}>
       <StatusBar barStyle="dark-content" backgroundColor={COLORS.beige} />
@@ -241,10 +251,10 @@ export default function HomeScreenMealConfirmed() {
           </View>
           <View style={styles.macroRow}>
             {[
-              { val: '875', label: 'kcal',    bg: '#FFE8EA', border: '#FF3347' },
-              { val: '65g', label: 'protein', bg: '#FFE0EE', border: '#FF6B9D' },
-              { val: '98g', label: 'carbs',   bg: '#FFF2DC', border: '#FF9F1C' },
-              { val: '22g', label: 'fats',    bg: '#D8F5F3', border: '#2EC4B6' },
+              { val: `${totalKcal}`, label: 'kcal', bg: '#FFE8EA', border: '#FF3347' },
+              { val: `${totalMacros.p}g`, label: 'protein', bg: '#FFE0EE', border: '#FF6B9D' },
+              { val: `${totalMacros.c}g`, label: 'carbs', bg: '#FFF2DC', border: '#FF9F1C' },
+              { val: `${totalMacros.f}g`, label: 'fats', bg: '#D8F5F3', border: '#2EC4B6' },
             ].map((m, i) => (
               <View key={i} style={[styles.mpill, { backgroundColor: m.bg, borderColor: m.border }]}>
                 <Text style={styles.mpillVal}>{m.val}</Text>
@@ -284,9 +294,9 @@ export default function HomeScreenMealConfirmed() {
             </View>
             <View style={styles.totalMacros}>
               {[
-                { val: '65g', label: 'Protein', color: '#FF9FBF' },
-                { val: '98g', label: 'Carbs',   color: '#FFD080' },
-                { val: '22g', label: 'Fats',    color: '#80E8E0' },
+                { val: `${totalMacros.p}g`, label: 'Protein', color: '#FF9FBF' },
+                { val: `${totalMacros.c}g`, label: 'Carbs', color: '#FFD080' },
+                { val: `${totalMacros.f}g`, label: 'Fats', color: '#80E8E0' },
               ].map((m, i) => (
                 <React.Fragment key={i}>
                   {i > 0 && <View style={styles.totalSep} />}
