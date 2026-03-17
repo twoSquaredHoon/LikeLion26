@@ -23,6 +23,7 @@ type RootStackParamList = {
   Height: undefined;
   Weight: undefined;
   GoalWeight: undefined;
+  Diet: undefined;
 };
 
 type GoalWeightScreenProps = {
@@ -191,7 +192,7 @@ export default function GoalWeightScreen({ navigation }: GoalWeightScreenProps) 
       <View style={{ flex: 1 }} />
 
       {/* ── Continue Button ── */}
-      <TouchableOpacity style={styles.continueBtn} onPress={() => navigation.navigate('Home')} activeOpacity={0.85}>
+      <TouchableOpacity style={styles.continueBtn} onPress={() => navigation.navigate('Diet')} activeOpacity={0.85}>
         <Text style={styles.continueBtnText}>Continue →</Text>
       </TouchableOpacity>
 
