@@ -2,7 +2,7 @@ import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { View, Text } from 'react-native';
 import Svg, { Path, Circle, Rect } from 'react-native-svg';
-import HomeScreen from '../screens/HomeScreen';
+import HomeScreen from '../screens/HomeScreen/HomeScreen';
 import DiningHallsScreen from '../screens/DiningHallsScreen';
 import ScanScreen from '../screens/ScanScreen';
 import CommunityScreen from '../screens/CommunityScreen';

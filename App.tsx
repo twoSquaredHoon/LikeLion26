@@ -7,7 +7,7 @@ import SignupScreen from './src/screens/SignupScreen';
 import OnboardingScreen from './src/screens/OnboardingScreen';
 import BottomBar from './src/navigation/BottomBar';
 import ForgotPasswordScreen from './src/screens/ForgotPasswordScreen';
-import HomeScreenMealConfirmed from './src/screens/HomeScreenMealConfirmed';
+import HomeScreenMealConfirmed from './src/screens/HomeScreen/HomeScreenMealConfirmed';
 
 export type RootStackParamList = {
   Login: undefined;
