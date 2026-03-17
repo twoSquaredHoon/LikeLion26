@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import {
   View,
   Text,
@@ -7,12 +7,21 @@ import {
   StyleSheet,
   SafeAreaView,
   StatusBar,
+  Animated,
+  Dimensions,
 } from 'react-native';
-import { Swipeable } from 'react-native-gesture-handler';
+import {
+  GestureDetector,
+  Gesture,
+  GestureHandlerRootView,
+} from 'react-native-gesture-handler';
 import Svg, { Path } from 'react-native-svg';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '../../App';
+
+const SCREEN_WIDTH = Dimensions.get('window').width;
+const SWIPE_THRESHOLD = SCREEN_WIDTH / 3;
 
 // ─── Constants ────────────────────────────────────────────────────────────────
 const COLORS = {
@@ -29,7 +38,13 @@ const COLORS = {
 const MACRO_TAG_COLORS = { p: '#FF6B9D', c: '#FF9F1C', f: '#2EC4B6' };
 
 // ─── Types ────────────────────────────────────────────────────────────────────
-interface FoodItem {
+interface MacroEntry {
+  label: string;
+  value: string;
+  type: 'p' | 'c' | 'f';
+}
+
+interface FoodVariant {
   name: string;
   sub: string;
   kcal: number;
@@ -37,17 +52,11 @@ interface FoodItem {
   dotBorder: string;
   blobColor: string;
   blobStyle: object;
-  macros: { label: string; value: string; type: 'p' | 'c' | 'f' }[];
-  alternatives: {
-    name: string;
-    sub: string;
-    kcal: number;
-    dotBg: string;
-    dotBorder: string;
-    blobColor: string;
-    blobStyle: object;
-    macros: { label: string; value: string; type: 'p' | 'c' | 'f' }[];
-  }[];
+  macros: MacroEntry[];
+}
+
+interface FoodItem extends FoodVariant {
+  alternatives: FoodVariant[];
 }
 
 // ─── Data ─────────────────────────────────────────────────────────────────────
@@ -128,86 +137,181 @@ const PlateIllustration = () => (
   </View>
 );
 
+// ─── Food card — single reusable row ─────────────────────────────────────────
+const FoodCard = ({
+  item,
+  isActive = false,
+  onPress,
+}: {
+  item: FoodVariant;
+  isActive?: boolean;
+  onPress?: () => void;
+}) => (
+  <TouchableOpacity
+    onPress={onPress}
+    activeOpacity={onPress ? 0.72 : 1}
+    style={[styles.foodItem, isActive && styles.foodItemActive]}
+  >
+    <View style={[styles.foodDot, { backgroundColor: item.dotBg, borderColor: item.dotBorder }]}>
+      <View style={[styles.foodDotBlob, { backgroundColor: item.blobColor, ...item.blobStyle }]} />
+    </View>
+    <View style={styles.foodItemInfo}>
+      <Text style={styles.foodItemName} numberOfLines={1}>{item.name}</Text>
+      <Text style={styles.foodItemSub}>{item.sub}</Text>
+    </View>
+    <View style={styles.foodItemRight}>
+      <Text style={styles.foodKcal}>{item.kcal} kcal</Text>
+      <View style={styles.foodMacros}>
+        {item.macros.map((m, j) => (
+          <View key={j} style={[styles.fmacro, { backgroundColor: MACRO_TAG_COLORS[m.type] }]}>
+            <Text style={styles.fmacroText}>{m.value} {m.label}</Text>
+          </View>
+        ))}
+      </View>
+    </View>
+    {isActive && <View style={styles.activeDot} />}
+  </TouchableOpacity>
+);
+
 // ─── Swipeable food item ──────────────────────────────────────────────────────
 const SwipeableFoodItem = ({
   item,
   altIndex,
   onSwap,
 }: {
-  item: typeof INITIAL_ITEMS[0];
+  item: FoodItem;
   altIndex: number;
-  onSwap: () => void;
+  onSwap: (selectedAltIndex: number) => void;
 }) => {
-  const swipeableRef = useRef<Swipeable>(null);
-  const current = altIndex === 0 ? item : item.alternatives[altIndex - 1];
+  const current: FoodVariant = altIndex === 0 ? item : item.alternatives[altIndex - 1];
+  const [expanded, setExpanded] = useState(false);
+  const translateX = useRef(new Animated.Value(0)).current;
+  const expandAnim = useRef(new Animated.Value(0)).current;
 
-  const renderRightActions = () => (
-    <TouchableOpacity
-      style={styles.swipeAction}
-      onPress={() => {
-        onSwap();
-        swipeableRef.current?.close();
-      }}
-    >
-      <Text style={styles.swipeActionIcon}>🔄</Text>
-      <Text style={styles.swipeActionText}>Swap</Text>
-    </TouchableOpacity>
-  );
+  const openPicker = () => {
+    setExpanded(true);
+    Animated.spring(expandAnim, {
+      toValue: 1,
+      useNativeDriver: true,
+      bounciness: 4,
+    }).start();
+  };
+
+  const closePicker = () => {
+    Animated.timing(expandAnim, {
+      toValue: 0,
+      duration: 180,
+      useNativeDriver: true,
+    }).start(() => setExpanded(false));
+  };
+
+  const snapBack = () => {
+    Animated.spring(translateX, {
+      toValue: 0,
+      useNativeDriver: true,
+      bounciness: 10,
+    }).start();
+  };
+
+  // Gesture.Pan from RNGH — correctly yields vertical movement to ScrollView
+  const pan = Gesture.Pan()
+    .activeOffsetX([-12, 12])   // only activate after clear horizontal intent
+    .failOffsetY([-8, 8])       // fail immediately on vertical drag → ScrollView wins
+    .runOnJS(true)
+    .onUpdate((e) => {
+      // only track leftward drag; dampen so card nudges rather than flying off
+      if (e.translationX < 0) {
+        translateX.setValue(e.translationX * 0.3);
+      }
+    })
+    .onEnd((e) => {
+      snapBack();
+      if (e.translationX < -SWIPE_THRESHOLD) {
+        openPicker();
+      }
+    })
+    .onFinalize(() => {
+      // always snap back even if gesture is cancelled externally
+      snapBack();
+    });
+
+  const allOptions: FoodVariant[] = [item, ...item.alternatives];
 
   return (
-    <Swipeable
-      ref={swipeableRef}
-      renderRightActions={renderRightActions}
-      friction={2}
-      rightThreshold={40}
-      onSwipeableOpen={() => {
-        onSwap();
-        swipeableRef.current?.close();
-      }}
-    >
-      <View style={styles.foodItem}>
-        <View style={[styles.foodDot, { backgroundColor: current.dotBg, borderColor: current.dotBorder }]}>
-          <View style={[styles.foodDotBlob, { backgroundColor: current.blobColor, ...current.blobStyle }]} />
-        </View>
-        <View style={styles.foodItemInfo}>
-          <Text style={styles.foodItemName} numberOfLines={1}>{current.name}</Text>
-          <Text style={styles.foodItemSub}>{current.sub}</Text>
-        </View>
-        <View style={styles.foodItemRight}>
-          <Text style={styles.foodKcal}>{current.kcal} kcal</Text>
-          <View style={styles.foodMacros}>
-            {current.macros.map((m, j) => (
-              <View key={j} style={[styles.fmacro, { backgroundColor: MACRO_TAG_COLORS[m.type] }]}>
-                <Text style={styles.fmacroText}>{m.value} {m.label}</Text>
-              </View>
-            ))}
+    <View style={styles.swipeRow}>
+      {/* Draggable card */}
+      <GestureDetector gesture={pan}>
+        <Animated.View style={{ transform: [{ translateX }] }}>
+          <FoodCard item={current} />
+        </Animated.View>
+      </GestureDetector>
+
+      {/* Inline picker — expands below the card in-place, no modal */}
+      {expanded && (
+        <Animated.View
+          style={[
+            styles.pickerWrap,
+            {
+              opacity: expandAnim,
+              transform: [{
+                translateY: expandAnim.interpolate({
+                  inputRange: [0, 1],
+                  outputRange: [-6, 0],
+                }),
+              }],
+            },
+          ]}
+        >
+          <View style={styles.pickerHeader}>
+            <Text style={styles.pickerTitle}>Choose an alternative</Text>
+            <TouchableOpacity
+              onPress={closePicker}
+              hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+            >
+              <Text style={styles.pickerClose}>✕</Text>
+            </TouchableOpacity>
           </View>
-        </View>
-      </View>
-    </Swipeable>
+
+          {allOptions.map((opt, idx) => (
+            <FoodCard
+              key={idx}
+              item={opt}
+              isActive={idx === altIndex}
+              onPress={() => {
+                onSwap(idx);
+                closePicker();
+              }}
+            />
+          ))}
+        </Animated.View>
+      )}
+    </View>
   );
 };
 
 // ─── Main Screen ──────────────────────────────────────────────────────────────
 export default function HomeScreenMealConfirmed() {
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
-  const [altIndices, setAltIndices] = React.useState<number[]>(INITIAL_ITEMS.map(() => 0));
+  const [altIndices, setAltIndices] = React.useState<number[]>(
+    INITIAL_ITEMS.map(() => 0)
+  );
 
-  const handleSwap = (itemIndex: number) => {
+  const handleSwap = (itemIndex: number, selectedAltIndex: number) => {
     setAltIndices(prev => {
       const next = [...prev];
-      const maxAlts = INITIAL_ITEMS[itemIndex].alternatives.length;
-      next[itemIndex] = (prev[itemIndex] + 1) % (maxAlts + 1);
+      next[itemIndex] = selectedAltIndex;
       return next;
     });
   };
 
-  const getCurrentItem = (i: number) => {
+  const getCurrentItem = (i: number): FoodVariant => {
     const alt = altIndices[i];
     return alt === 0 ? INITIAL_ITEMS[i] : INITIAL_ITEMS[i].alternatives[alt - 1];
   };
 
-  const totalKcal = INITIAL_ITEMS.reduce((sum, _, i) => sum + getCurrentItem(i).kcal, 0);
+  const totalKcal = INITIAL_ITEMS.reduce(
+    (sum, _, i) => sum + getCurrentItem(i).kcal, 0
+  );
 
   const totalMacros = INITIAL_ITEMS.reduce(
     (acc, _, i) => {
@@ -216,123 +320,142 @@ export default function HomeScreenMealConfirmed() {
       });
       return acc;
     },
-    { p: 0, c: 0, f: 0 }
+    { p: 0, c: 0, f: 0 } as Record<'p' | 'c' | 'f', number>
   );
 
   return (
-    <SafeAreaView style={styles.safeArea}>
-      <StatusBar barStyle="dark-content" backgroundColor={COLORS.beige} />
-      <View style={styles.container}>
+    // GestureHandlerRootView is required by RNGH for GestureDetector.
+    // If your App.tsx already wraps the whole app in it, remove this wrapper
+    // here to avoid nesting two GestureHandlerRootViews.
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <SafeAreaView style={styles.safeArea}>
+        <StatusBar barStyle="dark-content" backgroundColor={COLORS.beige} />
+        <View style={styles.container}>
 
-        {/* ── Confirmed Banner ── */}
-        <View style={styles.confirmedBanner}>
-          <View style={styles.confirmedCheck}>
-            <Svg width={18} height={18} viewBox="0 0 18 18">
-              <Path d="M3.5 9.5l4 4 7-8" stroke={COLORS.green} strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round" fill="none" />
-            </Svg>
-          </View>
-          <View>
-            <Text style={styles.confirmedLabel}>Meal Selected</Text>
-            <Text style={styles.confirmedTitle}>Roasted Turkey Recovery</Text>
-          </View>
-        </View>
-
-        {/* ── Dish Hero Card ── */}
-        <View style={styles.dishHero}>
-          <View style={styles.dishHeroTop}>
-            <Text style={styles.dishTag}>⭐ Best pick · High Protein Lean Bulk</Text>
-            <View style={styles.loggedBadge}>
-              <Text style={styles.loggedBadgeText}>Logged</Text>
+          {/* ── Confirmed Banner ── */}
+          <View style={styles.confirmedBanner}>
+            <View style={styles.confirmedCheck}>
+              <Svg width={18} height={18} viewBox="0 0 18 18">
+                <Path
+                  d="M3.5 9.5l4 4 7-8"
+                  stroke={COLORS.green}
+                  strokeWidth={2.5}
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  fill="none"
+                />
+              </Svg>
             </View>
-          </View>
-          <Text style={styles.dishName}>Roasted Turkey{'\n'}Recovery</Text>
-          <View style={styles.plateCenterWrap}>
-            <PlateIllustration />
-          </View>
-          <View style={styles.macroRow}>
-            {[
-              { val: `${totalKcal}`, label: 'kcal', bg: '#FFE8EA', border: '#FF3347' },
-              { val: `${totalMacros.p}g`, label: 'protein', bg: '#FFE0EE', border: '#FF6B9D' },
-              { val: `${totalMacros.c}g`, label: 'carbs', bg: '#FFF2DC', border: '#FF9F1C' },
-              { val: `${totalMacros.f}g`, label: 'fats', bg: '#D8F5F3', border: '#2EC4B6' },
-            ].map((m, i) => (
-              <View key={i} style={[styles.mpill, { backgroundColor: m.bg, borderColor: m.border }]}>
-                <Text style={styles.mpillVal}>{m.val}</Text>
-                <Text style={styles.mpillLabel}>{m.label}</Text>
-              </View>
-            ))}
-          </View>
-        </View>
-
-        {/* ── Scrollable section ── */}
-        <ScrollView
-          style={styles.scrollBody}
-          showsVerticalScrollIndicator={false}
-          contentContainerStyle={{ paddingBottom: 16 }}
-        >
-          <View style={styles.sectionHeader}>
-            <Text style={styles.sectionTitle}>What's on the plate</Text>
-            <Text style={styles.sectionHint}>← swipe to swap</Text>
-          </View>
-
-          <View style={styles.foodList}>
-            {INITIAL_ITEMS.map((item, i) => (
-              <SwipeableFoodItem
-                key={i}
-                item={item}
-                altIndex={altIndices[i]}
-                onSwap={() => handleSwap(i)}
-              />
-            ))}
-          </View>
-
-          {/* Total row */}
-          <View style={styles.totalRow}>
             <View>
-              <Text style={styles.totalLabel}>Total</Text>
-              <Text style={styles.totalKcal}>{totalKcal} kcal</Text>
+              <Text style={styles.confirmedLabel}>Meal Selected</Text>
+              <Text style={styles.confirmedTitle}>Roasted Turkey Recovery</Text>
             </View>
-            <View style={styles.totalMacros}>
+          </View>
+
+          {/* ── Dish Hero Card ── */}
+          <View style={styles.dishHero}>
+            <View style={styles.dishHeroTop}>
+              <Text style={styles.dishTag}>⭐ Best pick · High Protein Lean Bulk</Text>
+              <View style={styles.loggedBadge}>
+                <Text style={styles.loggedBadgeText}>Logged</Text>
+              </View>
+            </View>
+            <Text style={styles.dishName}>Roasted Turkey{'\n'}Recovery</Text>
+            <View style={styles.plateCenterWrap}>
+              <PlateIllustration />
+            </View>
+            <View style={styles.macroRow}>
               {[
-                { val: `${totalMacros.p}g`, label: 'Protein', color: '#FF9FBF' },
-                { val: `${totalMacros.c}g`, label: 'Carbs', color: '#FFD080' },
-                { val: `${totalMacros.f}g`, label: 'Fats', color: '#80E8E0' },
+                { val: `${totalKcal}`,        label: 'kcal',    bg: '#FFE8EA', border: '#FF3347' },
+                { val: `${totalMacros.p}g`,   label: 'protein', bg: '#FFE0EE', border: '#FF6B9D' },
+                { val: `${totalMacros.c}g`,   label: 'carbs',   bg: '#FFF2DC', border: '#FF9F1C' },
+                { val: `${totalMacros.f}g`,   label: 'fats',    bg: '#D8F5F3', border: '#2EC4B6' },
               ].map((m, i) => (
-                <React.Fragment key={i}>
-                  {i > 0 && <View style={styles.totalSep} />}
-                  <View style={styles.totalMacro}>
-                    <Text style={[styles.totalMacroVal, { color: m.color }]}>{m.val}</Text>
-                    <Text style={styles.totalMacroLabel}>{m.label}</Text>
-                  </View>
-                </React.Fragment>
+                <View key={i} style={[styles.mpill, { backgroundColor: m.bg, borderColor: m.border }]}>
+                  <Text style={styles.mpillVal}>{m.val}</Text>
+                  <Text style={styles.mpillLabel}>{m.label}</Text>
+                </View>
               ))}
             </View>
           </View>
 
-          {/* Log button */}
-          <View style={styles.logBtnWrap}>
-            <TouchableOpacity
-              style={styles.logBtn}
-              onPress={() => navigation.navigate('Home')}
-              activeOpacity={0.85}
-            >
-              <Svg width={20} height={20} viewBox="0 0 24 24">
-                <Path d="M12 5v14M5 12h14" stroke="white" strokeWidth={2.5} strokeLinecap="round" fill="none" />
-              </Svg>
-              <Text style={styles.logBtnText}>Log This Meal</Text>
-            </TouchableOpacity>
-          </View>
-        </ScrollView>
-      </View>
-    </SafeAreaView>
+          {/* ── Scrollable section ── */}
+          <ScrollView
+            style={styles.scrollBody}
+            showsVerticalScrollIndicator={false}
+            contentContainerStyle={{ paddingBottom: 16 }}
+          >
+            <View style={styles.sectionHeader}>
+              <Text style={styles.sectionTitle}>What's on the plate</Text>
+              <Text style={styles.sectionHint}>← swipe to swap</Text>
+            </View>
+
+            <View style={styles.foodList}>
+              {INITIAL_ITEMS.map((item, i) => (
+                <SwipeableFoodItem
+                  key={i}
+                  item={item}
+                  altIndex={altIndices[i]}
+                  onSwap={(selectedAltIndex) => handleSwap(i, selectedAltIndex)}
+                />
+              ))}
+            </View>
+
+            {/* ── Total row ── */}
+            <View style={styles.totalRow}>
+              <View>
+                <Text style={styles.totalLabel}>Total</Text>
+                <Text style={styles.totalKcal}>{totalKcal} kcal</Text>
+              </View>
+              <View style={styles.totalMacros}>
+                {[
+                  { val: `${totalMacros.p}g`, label: 'Protein', color: '#FF9FBF' },
+                  { val: `${totalMacros.c}g`, label: 'Carbs',   color: '#FFD080' },
+                  { val: `${totalMacros.f}g`, label: 'Fats',    color: '#80E8E0' },
+                ].map((m, i) => (
+                  <React.Fragment key={i}>
+                    {i > 0 && <View style={styles.totalSep} />}
+                    <View style={styles.totalMacro}>
+                      <Text style={[styles.totalMacroVal, { color: m.color }]}>{m.val}</Text>
+                      <Text style={styles.totalMacroLabel}>{m.label}</Text>
+                    </View>
+                  </React.Fragment>
+                ))}
+              </View>
+            </View>
+
+            {/* ── Log button ── */}
+            <View style={styles.logBtnWrap}>
+              <TouchableOpacity
+                style={styles.logBtn}
+                onPress={() => navigation.navigate('Home')}
+                activeOpacity={0.85}
+              >
+                <Svg width={20} height={20} viewBox="0 0 24 24">
+                  <Path
+                    d="M12 5v14M5 12h14"
+                    stroke="white"
+                    strokeWidth={2.5}
+                    strokeLinecap="round"
+                    fill="none"
+                  />
+                </Svg>
+                <Text style={styles.logBtnText}>Log This Meal</Text>
+              </TouchableOpacity>
+            </View>
+          </ScrollView>
+        </View>
+      </SafeAreaView>
+    </GestureHandlerRootView>
   );
 }
 
 // ─── Styles ───────────────────────────────────────────────────────────────────
 const styles = StyleSheet.create({
-  safeArea: { flex: 1, backgroundColor: COLORS.beige },
+  safeArea:  { flex: 1, backgroundColor: COLORS.beige },
   container: { flex: 1, backgroundColor: COLORS.beige },
 
+  // ── Banner ──
   confirmedBanner: {
     flexDirection: 'row', alignItems: 'center', gap: 12,
     marginHorizontal: 20, marginTop: 10,
@@ -349,6 +472,7 @@ const styles = StyleSheet.create({
   confirmedLabel: { fontSize: 10, fontWeight: '700', letterSpacing: 1, textTransform: 'uppercase', color: 'rgba(255,255,255,0.8)', marginBottom: 2 },
   confirmedTitle: { fontSize: 17, fontWeight: '900', color: 'white', letterSpacing: -0.3, lineHeight: 18 },
 
+  // ── Hero ──
   dishHero: {
     marginHorizontal: 20, marginTop: 10, backgroundColor: '#FFBFC7',
     borderWidth: 3, borderColor: COLORS.border, borderRadius: 24,
@@ -360,33 +484,45 @@ const styles = StyleSheet.create({
   loggedBadgeText: { fontSize: 10, fontWeight: '700', color: 'white', letterSpacing: 0.4, textTransform: 'uppercase' },
   dishName: { fontSize: 22, fontWeight: '900', color: COLORS.ink, letterSpacing: -0.6, lineHeight: 24, paddingHorizontal: 18, paddingTop: 6 },
   plateCenterWrap: { alignItems: 'center', paddingVertical: 8 },
+
+  // ── Plate ──
   plateOuter: { width: 150, height: 150, borderRadius: 75, backgroundColor: '#F5EFE0', borderWidth: 4, borderColor: COLORS.border, alignItems: 'center', justifyContent: 'center' },
   plateRim: { position: 'absolute', top: 10, left: 10, right: 10, bottom: 10, borderRadius: 999, borderWidth: 2, borderColor: 'rgba(0,0,0,0.08)', borderStyle: 'dashed' },
   plateInner: { width: 116, height: 116, borderRadius: 58, backgroundColor: '#EDE6D4', overflow: 'hidden', position: 'relative' },
   food: { position: 'absolute' },
+
+  // ── Macro pills ──
   macroRow: { flexDirection: 'row', gap: 7, paddingHorizontal: 16, paddingBottom: 10 },
   mpill: { flex: 1, borderWidth: 2, borderRadius: 14, paddingVertical: 5, paddingHorizontal: 10, alignItems: 'center' },
   mpillVal: { fontSize: 14, fontWeight: '800', color: COLORS.ink, lineHeight: 16, marginBottom: 2 },
   mpillLabel: { fontSize: 9, fontWeight: '700', textTransform: 'uppercase', letterSpacing: 0.4, color: COLORS.inkMuted },
 
+  // ── Scroll body ──
   scrollBody: { flex: 1 },
   sectionHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 22, paddingTop: 10, paddingBottom: 8 },
   sectionTitle: { fontSize: 13, fontWeight: '900', color: COLORS.ink, textTransform: 'uppercase', letterSpacing: 0.6 },
   sectionHint: { fontSize: 10, fontWeight: '600', color: COLORS.inkMuted },
-
   foodList: { paddingHorizontal: 20, gap: 7 },
 
-  swipeAction: {
-    backgroundColor: COLORS.red,
-    borderWidth: 2.5, borderColor: COLORS.border, borderRadius: 16,
-    marginLeft: 8,
-    width: 70, alignItems: 'center', justifyContent: 'center',
+  // ── Swipe row wrapper ──
+  swipeRow: { gap: 6 },
+
+  // ── Food card ──
+  foodItem: {
+    flexDirection: 'row', alignItems: 'center', gap: 12,
+    backgroundColor: COLORS.bg2,
+    borderWidth: 2.5, borderColor: COLORS.border,
+    borderRadius: 16, paddingHorizontal: 12, paddingVertical: 9,
     shadowColor: COLORS.border, shadowOffset: { width: 3, height: 3 }, shadowOpacity: 1, shadowRadius: 0, elevation: 3,
   },
-  swipeActionIcon: { fontSize: 18 },
-  swipeActionText: { fontSize: 10, fontWeight: '800', color: 'white', marginTop: 2 },
-
-  foodItem: { flexDirection: 'row', alignItems: 'center', gap: 12, backgroundColor: '#FFF5F5', borderWidth: 2.5, borderColor: COLORS.border, borderRadius: 16, paddingHorizontal: 12, paddingVertical: 9, shadowColor: COLORS.border, shadowOffset: { width: 3, height: 3 }, shadowOpacity: 1, shadowRadius: 0, elevation: 3 },
+  foodItemActive: {
+    backgroundColor: COLORS.redLight,
+    borderColor: COLORS.red,
+  },
+  activeDot: {
+    width: 8, height: 8, borderRadius: 4,
+    backgroundColor: COLORS.red, flexShrink: 0,
+  },
   foodDot: { width: 40, height: 40, borderRadius: 14, borderWidth: 2.5, alignItems: 'center', justifyContent: 'center', flexShrink: 0, overflow: 'hidden' },
   foodDotBlob: { position: 'absolute' },
   foodItemInfo: { flex: 1, minWidth: 0 },
@@ -398,7 +534,33 @@ const styles = StyleSheet.create({
   fmacro: { borderRadius: 8, paddingHorizontal: 6, paddingVertical: 2 },
   fmacroText: { fontSize: 10, fontWeight: '700', color: 'white', letterSpacing: 0.2 },
 
-  totalRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginHorizontal: 20, marginTop: 8, backgroundColor: COLORS.ink, borderWidth: 3, borderColor: COLORS.border, borderRadius: 18, paddingHorizontal: 16, paddingVertical: 10, shadowColor: COLORS.border, shadowOffset: { width: 4, height: 4 }, shadowOpacity: 1, shadowRadius: 0, elevation: 4 },
+  // ── Inline picker ──
+  pickerWrap: {
+    backgroundColor: COLORS.beige,
+    borderWidth: 2.5, borderColor: COLORS.border,
+    borderRadius: 18, padding: 10, gap: 6,
+    shadowColor: COLORS.border, shadowOffset: { width: 3, height: 3 }, shadowOpacity: 1, shadowRadius: 0, elevation: 4,
+  },
+  pickerHeader: {
+    flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center',
+    paddingHorizontal: 2, paddingBottom: 6,
+  },
+  pickerTitle: {
+    fontSize: 11, fontWeight: '800', color: COLORS.inkMuted,
+    textTransform: 'uppercase', letterSpacing: 0.7,
+  },
+  pickerClose: {
+    fontSize: 14, fontWeight: '700', color: COLORS.inkMuted,
+  },
+
+  // ── Total row ──
+  totalRow: {
+    flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center',
+    marginHorizontal: 20, marginTop: 8,
+    backgroundColor: COLORS.ink, borderWidth: 3, borderColor: COLORS.border,
+    borderRadius: 18, paddingHorizontal: 16, paddingVertical: 10,
+    shadowColor: COLORS.border, shadowOffset: { width: 4, height: 4 }, shadowOpacity: 1, shadowRadius: 0, elevation: 4,
+  },
   totalLabel: { fontSize: 12, fontWeight: '800', color: 'rgba(255,255,255,0.6)', textTransform: 'uppercase', letterSpacing: 0.7 },
   totalKcal: { fontSize: 22, fontWeight: '900', color: 'white', letterSpacing: -0.6, lineHeight: 24 },
   totalMacros: { flexDirection: 'row', gap: 8, alignItems: 'center' },
@@ -407,7 +569,13 @@ const styles = StyleSheet.create({
   totalMacroVal: { fontSize: 14, fontWeight: '800', lineHeight: 16 },
   totalMacroLabel: { fontSize: 9, fontWeight: '700', color: 'rgba(255,255,255,0.5)', textTransform: 'uppercase', letterSpacing: 0.4, marginTop: 2 },
 
+  // ── Log button ──
   logBtnWrap: { paddingHorizontal: 20, paddingTop: 8 },
-  logBtn: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 10, backgroundColor: COLORS.red, borderWidth: 3, borderColor: COLORS.border, borderRadius: 20, paddingVertical: 16, shadowColor: COLORS.border, shadowOffset: { width: 6, height: 6 }, shadowOpacity: 1, shadowRadius: 0, elevation: 6 },
+  logBtn: {
+    flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 10,
+    backgroundColor: COLORS.red, borderWidth: 3, borderColor: COLORS.border,
+    borderRadius: 20, paddingVertical: 16,
+    shadowColor: COLORS.border, shadowOffset: { width: 6, height: 6 }, shadowOpacity: 1, shadowRadius: 0, elevation: 6,
+  },
   logBtnText: { fontSize: 16, fontWeight: '900', color: 'white', letterSpacing: -0.1 },
 });
