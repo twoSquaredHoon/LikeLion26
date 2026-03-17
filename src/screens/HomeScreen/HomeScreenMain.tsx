@@ -421,7 +421,7 @@ const HallCard = ({ hall, navigation }: { hall: DiningHall; navigation: StackNav
             </View>
 
             {/* Log button */}
-            <TouchableOpacity style={styles.logBtn} onPress={() => navigation.navigate('MealConfirmed')} activeOpacity={0.85}>
+            <TouchableOpacity style={styles.logBtn} onPress={() => navigation.navigate('Meal')} activeOpacity={0.85}>
               <Svg width={16} height={16} viewBox="0 0 24 24">
                 <Path
                   d="M12 5v14M5 12h14"

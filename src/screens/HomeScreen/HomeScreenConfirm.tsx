@@ -82,7 +82,7 @@ export default function HomeScreenDish() {
         <View style={styles.btnWrap}>
           <TouchableOpacity
             style={styles.btn}
-            onPress={() => navigation.navigate('Review')}
+            onPress={() => navigation.navigate('Add')}
             activeOpacity={0.85}
           >
             <Text style={styles.btnText}>Continue</Text>
