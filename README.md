@@ -117,41 +117,6 @@ Login → Signup → Onboarding → Home
 
 ---
 
-## Backend Integration — TODO
-
-The following are currently using static/hardcoded data and need to be connected to the API when the backend is ready.
-
-### `src/screens/HomeScreen/components/foodData.ts`
-- `INITIAL_ITEMS` is a hardcoded array of dining hall food items
-- **Needs:** `GET /api/dining-halls/:id/menu` → replace with API fetch in `HomeScreenMeal.tsx`
-- The `FoodVariant` and `FoodItem` types are already defined and ready to receive API data
-
-### `src/screens/HomeScreen/HomeScreenMeal.tsx`
-- Swap selections (alt indices) are local state only
-- **Needs:** `POST /api/meal-log` when user taps "Log This Meal"
-- Pass `altIndices` + computed `totalKcal` + `totalMacros` in the request body
-
-### `src/screens/HomeScreen/HomeScreenConfirm.tsx`
-- Meal name, kcal, macros are hardcoded
-- **Needs:** Receive selected meal data via navigation params from `HomeScreenMeal`
-
-### `src/screens/HomeScreen/HomeScreenAdd.tsx`
-- Add-on food options are hardcoded
-- **Needs:** `GET /api/dining-halls/:id/addons` + `POST /api/meal-log/addons`
-
-### `src/screens/HomeScreen/HomeScreenMain.tsx`
-- Daily summary needs real logged meal history
-- **Needs:** `GET /api/meal-log?date=today&userId=:id`
-
-### `src/screens/LoginScreen.tsx` / `SignupScreen.tsx`
-- **Needs:** `POST /api/auth/login` and `POST /api/auth/signup`
-- Store JWT token in Zustand + Axios headers after login
-
-### `src/screens/OnboardingScreen.tsx`
-- **Needs:** `POST /api/users/:id/preferences` to save health goals
-
----
-
 ## Contributing
 
 1. Branch off `main` — `git checkout -b feat/your-feature`
