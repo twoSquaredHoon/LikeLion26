@@ -17,10 +17,12 @@ export default function SwipeableFoodItem({
   item,
   altIndex,
   onSwap,
+  onExpandChange,
 }: {
   item: FoodItem;
   altIndex: number;
   onSwap: (selectedAltIndex: number) => void;
+  onExpandChange?: (open: boolean) => void;
 }) {
   const current: FoodVariant = altIndex === 0 ? item : item.alternatives[altIndex - 1];
   const [expanded, setExpanded] = useState(false);
@@ -29,10 +31,12 @@ export default function SwipeableFoodItem({
 
   const openPicker = () => {
     setExpanded(true);
+    onExpandChange?.(true);
     Animated.spring(expandAnim, { toValue: 1, useNativeDriver: true, bounciness: 4 }).start();
   };
 
   const closePicker = () => {
+    onExpandChange?.(false);
     Animated.timing(expandAnim, { toValue: 0, duration: 180, useNativeDriver: true })
       .start(() => setExpanded(false));
   };
@@ -57,7 +61,9 @@ export default function SwipeableFoodItem({
   const allOptions: FoodVariant[] = [item, ...item.alternatives];
 
   return (
-    <View style={styles.swipeRow}>
+    // When expanded, zIndex 30 lifts this row above the overlay (zIndex 10)
+    // When not expanded, zIndex 0 so it sits beneath the overlay
+    <View style={[styles.swipeRow, expanded && styles.swipeRowExpanded]}>
       <GestureDetector gesture={pan}>
         <Animated.View style={{ transform: [{ translateX }] }}>
           <FoodCard item={current} />
@@ -100,12 +106,21 @@ export default function SwipeableFoodItem({
 }
 
 const styles = StyleSheet.create({
-  swipeRow: { gap: 6 },
+  swipeRow: {
+    gap: 6,
+    zIndex: 0,
+  },
+  swipeRowExpanded: {
+    zIndex: 30,
+    elevation: 30,
+  },
   pickerWrap: {
     backgroundColor: COLORS.beige,
     borderWidth: 2.5, borderColor: COLORS.border,
     borderRadius: 18, padding: 10, gap: 6,
-    shadowColor: COLORS.border, shadowOffset: { width: 3, height: 3 }, shadowOpacity: 1, shadowRadius: 0, elevation: 4,
+    shadowColor: COLORS.border, shadowOffset: { width: 3, height: 3 }, shadowOpacity: 1, shadowRadius: 0,
+    elevation: 30,
+    zIndex: 30,
   },
   pickerHeader: {
     flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center',

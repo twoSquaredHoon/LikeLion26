@@ -27,6 +27,7 @@ const COLORS = {
 export default function HomeScreenMeal() {
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
   const [altIndices, setAltIndices] = React.useState<number[]>(INITIAL_ITEMS.map(() => 0));
+  const [anyExpanded, setAnyExpanded] = React.useState(false);
 
   const handleSwap = (itemIndex: number, selectedAltIndex: number) => {
     setAltIndices(prev => {
@@ -85,12 +86,14 @@ export default function HomeScreenMeal() {
             style={styles.scrollBody}
             showsVerticalScrollIndicator={false}
             contentContainerStyle={{ paddingBottom: 16 }}
+            scrollEnabled={!anyExpanded}
           >
             <View style={styles.sectionHeader}>
               <Text style={styles.sectionTitle}>What's on the plate</Text>
               <Text style={styles.sectionHint}>← swipe to swap</Text>
             </View>
 
+            {/* Overlay lives here as a sibling to swipeRow items so zIndex works */}
             <View style={styles.foodList}>
               {INITIAL_ITEMS.map((item, i) => (
                 <SwipeableFoodItem
@@ -98,8 +101,12 @@ export default function HomeScreenMeal() {
                   item={item}
                   altIndex={altIndices[i]}
                   onSwap={(selectedAltIndex) => handleSwap(i, selectedAltIndex)}
+                  onExpandChange={(open) => setAnyExpanded(open)}
                 />
               ))}
+              {anyExpanded && (
+                <View style={styles.overlay} pointerEvents="none" />
+              )}
             </View>
 
             {/* ── Log button ── */}
@@ -116,6 +123,7 @@ export default function HomeScreenMeal() {
               </TouchableOpacity>
             </View>
           </ScrollView>
+
         </View>
       </SafeAreaView>
     </GestureHandlerRootView>
@@ -125,6 +133,7 @@ export default function HomeScreenMeal() {
 const styles = StyleSheet.create({
   safeArea:  { flex: 1, backgroundColor: COLORS.beige },
   container: { flex: 1, backgroundColor: COLORS.beige },
+
   totalRow: {
     flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center',
     marginHorizontal: 20, marginTop: 10,
@@ -139,11 +148,25 @@ const styles = StyleSheet.create({
   totalMacro: { alignItems: 'center' },
   totalMacroVal: { fontSize: 14, fontWeight: '800', lineHeight: 16 },
   totalMacroLabel: { fontSize: 9, fontWeight: '700', color: 'rgba(255,255,255,0.5)', textTransform: 'uppercase', letterSpacing: 0.4, marginTop: 2 },
+
   scrollBody: { flex: 1 },
   sectionHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 22, paddingTop: 10, paddingBottom: 8 },
   sectionTitle: { fontSize: 13, fontWeight: '900', color: COLORS.ink, textTransform: 'uppercase', letterSpacing: 0.6 },
   sectionHint: { fontSize: 10, fontWeight: '600', color: COLORS.inkMuted },
-  foodList: { paddingHorizontal: 20, gap: 7 },
+
+  foodList: {
+    paddingHorizontal: 20,
+    gap: 7,
+    position: 'relative',
+  },
+
+  overlay: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: 'rgba(26, 10, 10, 0.5)',
+    zIndex: 10,
+    borderRadius: 16,
+  },
+
   logBtnWrap: { paddingHorizontal: 20, paddingTop: 8 },
   logBtn: {
     flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 10,
