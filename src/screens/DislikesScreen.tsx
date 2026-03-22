@@ -23,6 +23,7 @@ type RootStackParamList = {
   GoalWeight: undefined;
   Diet: undefined;
   Dislikes: undefined;
+  Allergens: undefined;
 };
 
 type DislikesScreenProps = {
@@ -160,7 +161,7 @@ export default function DislikesScreen({ navigation }: DislikesScreenProps) {
       <View style={styles.bottomSection}>
         <TouchableOpacity
           style={styles.continueBtn}
-          onPress={() => navigation.navigate('Home')}
+          onPress={() => navigation.navigate('Allergens')}
           activeOpacity={0.85}
         >
           <Text style={styles.continueBtnText}>Continue →</Text>
@@ -170,7 +171,7 @@ export default function DislikesScreen({ navigation }: DislikesScreenProps) {
           <TouchableOpacity onPress={() => navigation.goBack()} activeOpacity={0.7}>
             <Text style={styles.backRowText}>← Back</Text>
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => navigation.navigate('Home')} activeOpacity={0.7}>
+          <TouchableOpacity onPress={() => navigation.navigate('Allergens')} activeOpacity={0.7}>
             <Text style={styles.skipText}>Skip</Text>
           </TouchableOpacity>
         </View>
