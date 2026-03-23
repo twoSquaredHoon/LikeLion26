@@ -1,0 +1,125 @@
+import { StyleSheet, Platform } from 'react-native';
+import { C } from '../theme';
+
+export const styles = StyleSheet.create({
+  hallCard: {
+    backgroundColor: C.bg2,
+    borderWidth: 2.5,
+    borderColor: C.border,
+    borderRadius: 22,
+    marginBottom: 16,
+    overflow: 'hidden',
+    ...Platform.select({
+      ios: { shadowColor: C.border, shadowOffset: { width: 4, height: 4 }, shadowOpacity: 1, shadowRadius: 0 },
+      android: { elevation: 3 },
+    }),
+  },
+  hallHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 14,
+    padding: 18,
+  },
+  hallEmojiWrap: {
+    width: 64,
+    height: 64,
+    borderRadius: 18,
+    borderWidth: 2.5,
+    borderColor: C.border,
+    alignItems: 'center',
+    justifyContent: 'center',
+    flexShrink: 0,
+    ...Platform.select({
+      ios: { shadowColor: C.border, shadowOffset: { width: 2, height: 2 }, shadowOpacity: 1, shadowRadius: 0 },
+      android: { elevation: 2 },
+    }),
+  },
+  hallEmoji: { fontSize: 30 },
+  hallInfo: { flex: 1, minWidth: 0 },
+  hallName: {
+    fontSize: 16,
+    fontWeight: '900',
+    color: C.ink,
+    letterSpacing: -0.3,
+    marginBottom: 7,
+  },
+  hallMeta: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 7,
+  },
+  hallHours: {
+    fontSize: 11,
+    fontWeight: '600',
+    color: C.inkMuted,
+  },
+  locationBtn: {
+    alignSelf: 'flex-start',
+    marginTop: 9,
+    paddingVertical: 4,
+    paddingHorizontal: 10,
+    borderRadius: 10,
+    borderWidth: 1.5,
+    borderColor: C.border,
+    backgroundColor: C.bg,
+  },
+  locationBtnText: {
+    fontSize: 11,
+    fontWeight: '700',
+    color: C.ink,
+  },
+  hallRight: {
+    alignItems: 'flex-end',
+    gap: 10,
+    flexShrink: 0,
+  },
+  hallChevron: {
+    width: 30,
+    height: 30,
+    borderRadius: 15,
+    backgroundColor: C.redLight,
+    borderWidth: 2,
+    borderColor: C.border,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  hallExpandInner: {
+    borderTopWidth: 2.5,
+    borderTopColor: C.border,
+  },
+  closedNote: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 14,
+    paddingTop: 10,
+  },
+  closedNoteText: {
+    fontSize: 11,
+    fontWeight: '700',
+    color: C.inkMuted,
+  },
+  mealTabs: {
+    flexDirection: 'row',
+    gap: 6,
+    paddingHorizontal: 14,
+    paddingTop: 12,
+  },
+  mealTab: {
+    flex: 1,
+    paddingVertical: 7,
+    borderWidth: 2,
+    borderColor: C.border,
+    borderRadius: 22,
+    alignItems: 'center',
+    backgroundColor: C.bg,
+  },
+  mealTabActive: {
+    backgroundColor: C.ink,
+    ...Platform.select({
+      ios: { shadowColor: C.border, shadowOffset: { width: 2, height: 2 }, shadowOpacity: 1, shadowRadius: 0 },
+      android: { elevation: 2 },
+    }),
+  },
+  mealTabText: { fontSize: 11, fontWeight: '800', color: C.ink },
+  mealTabTextActive: { color: 'white' },
+});
